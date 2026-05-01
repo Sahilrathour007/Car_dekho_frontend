@@ -1,0 +1,1347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CarDekho · Finance First</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #C8311A;
+      --red-light: #e84022;
+      --ink: #0D0F12;
+      --ink-80: rgba(13,15,18,0.80);
+      --ink-50: rgba(13,15,18,0.50);
+      --ink-20: rgba(13,15,18,0.20);
+      --line: #E4E6EA;
+      --surface: #F6F7F9;
+      --white: #ffffff;
+      --green: #006B4D;
+      --green-bg: #EAF5F0;
+      --blue: #1A4FA0;
+      --blue-bg: #EDF2FC;
+      --amber: #7A4D08;
+      --amber-bg: #FDF5E3;
+      --shadow-card: 0 2px 12px rgba(13,15,18,0.07), 0 8px 32px rgba(13,15,18,0.06);
+      --shadow-elevated: 0 4px 20px rgba(13,15,18,0.10), 0 20px 60px rgba(13,15,18,0.10);
+      --r-sm: 6px;
+      --r: 10px;
+      --r-lg: 16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--surface);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select { font: inherit; cursor: pointer; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── WRAP ─── */
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 20px;
+      height: 72px;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--ink);
+    }
+
+    .brand-icon {
+      width: 36px; height: 36px;
+      background: var(--red);
+      border-radius: 8px;
+      display: grid; place-items: center;
+    }
+
+    .brand-icon svg { fill: white; }
+
+    .brand span { color: var(--red); }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 32px;
+      font-size: 14px; font-weight: 500; color: var(--ink-80);
+    }
+
+    .nav-link { transition: color 0.2s; }
+    .nav-link:hover { color: var(--red); }
+
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 44px; padding: 0 20px;
+      border-radius: var(--r-sm); border: 1.5px solid transparent;
+      font-size: 14px; font-weight: 600;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: var(--line);
+      color: var(--ink-80);
+    }
+    .btn-ghost:hover { border-color: var(--ink-50); color: var(--ink); }
+
+    .btn-primary {
+      background: var(--red);
+      border-color: var(--red);
+      color: white;
+      box-shadow: 0 4px 14px rgba(200,49,26,0.24);
+    }
+    .btn-primary:hover { background: var(--red-light); box-shadow: 0 6px 20px rgba(200,49,26,0.32); }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .btn-outline:hover { background: #FFF3F0; }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      background:
+        linear-gradient(105deg, rgba(5,6,9,0.88) 0%, rgba(5,6,9,0.58) 50%, rgba(5,6,9,0.14) 100%),
+        url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1900&q=88") center/cover no-repeat;
+      color: white;
+      min-height: 640px;
+      display: flex; align-items: center;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 60px; align-items: center;
+      padding: 88px 0 96px;
+    }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: ''; display: block;
+      width: 24px; height: 1px; background: rgba(255,255,255,0.5);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(46px, 6vw, 82px);
+      font-weight: 900; line-height: 0.96;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-copy {
+      margin-top: 22px;
+      font-size: 17px; font-weight: 300; line-height: 1.65;
+      color: rgba(255,255,255,0.80);
+      max-width: 540px;
+    }
+
+    .api-status {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 28px;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 100px;
+      font-size: 12px; font-weight: 500;
+      color: rgba(255,255,255,0.80);
+      backdrop-filter: blur(6px);
+    }
+
+    .api-status::before {
+      content: ''; width: 7px; height: 7px;
+      border-radius: 50%; background: #f4b740;
+      flex-shrink: 0;
+    }
+    .api-status.connected::before { background: #23c483; }
+    .api-status.offline::before { background: #f4b740; }
+
+    /* ─── SEARCH PANEL ─── */
+    .search-panel {
+      background: white;
+      border-radius: var(--r-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-elevated);
+      color: var(--ink);
+    }
+
+    .panel-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-50); margin-bottom: 16px;
+    }
+
+    .tabs {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border: 1.5px solid var(--line);
+      border-radius: var(--r-sm); overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .tab {
+      height: 44px; border: 0; background: white;
+      font-size: 13px; font-weight: 600;
+      color: var(--ink-50);
+      transition: all 0.18s;
+      border-right: 1.5px solid var(--line);
+    }
+    .tab:last-child { border-right: 0; }
+
+    .tab.active {
+      background: #FFF3F0; color: var(--red);
+      box-shadow: inset 0 -2px 0 var(--red);
+    }
+
+    .field-label {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ink-50); margin-bottom: 10px;
+      display: block;
+    }
+
+    .budget-display {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px; font-weight: 700;
+      letter-spacing: -0.03em; color: var(--ink);
+      margin-bottom: 4px; line-height: 1;
+    }
+
+    .budget-slider {
+      -webkit-appearance: none;
+      width: 100%; height: 3px;
+      background: linear-gradient(to right, var(--red) 45%, var(--line) 45%);
+      border-radius: 2px; outline: none; margin-bottom: 8px;
+      border: none;
+    }
+    .budget-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 2px 8px rgba(200,49,26,0.32);
+      cursor: pointer;
+    }
+
+    .microcopy {
+      font-size: 12px; color: var(--ink-50);
+      margin-bottom: 18px; line-height: 1.5;
+    }
+
+    .quick-segments {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px; margin-bottom: 18px;
+    }
+
+    .segment {
+      border: 1.5px solid var(--line);
+      background: white; border-radius: var(--r-sm);
+      padding: 10px 12px;
+      font-size: 13px; font-weight: 600;
+      color: var(--ink-80); text-align: left;
+      transition: all 0.18s;
+    }
+    .segment:hover { border-color: var(--red); }
+    .segment.active { border-color: var(--red); background: #FFF3F0; color: var(--red); }
+
+    .loan-note {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 12px 14px;
+      background: var(--blue-bg);
+      border: 1.5px solid #C5D9F5;
+      border-radius: var(--r-sm);
+      color: var(--blue);
+      font-size: 12px; font-weight: 600; line-height: 1.4;
+      margin-bottom: 18px;
+    }
+
+    .loan-note::before {
+      content: 'i'; width: 18px; height: 18px; border-radius: 50%;
+      background: var(--blue); color: white;
+      display: grid; place-items: center; font-size: 11px;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ─── SECTIONS ─── */
+    .section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--line);
+      background: white;
+    }
+    .section.alt { background: var(--surface); }
+
+    .section-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 10px;
+    }
+
+    .section-head {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 4vw, 52px);
+      font-weight: 700; line-height: 1.02;
+      letter-spacing: -0.03em;
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700;
+      letter-spacing: -0.02em; line-height: 1.2;
+    }
+
+    .section-sub {
+      font-size: 16px; font-weight: 300; line-height: 1.65;
+      color: var(--ink-50); max-width: 620px;
+      margin-top: 10px;
+    }
+
+    /* ─── TRUST STRIP ─── */
+    .trust-strip {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 16px;
+    }
+
+    .trust-item {
+      background: white; border: 1px solid var(--line);
+      border-radius: var(--r); padding: 22px 20px;
+      transition: box-shadow 0.22s;
+    }
+    .trust-item:hover { box-shadow: var(--shadow-card); }
+
+    .trust-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--green-bg);
+      display: grid; place-items: center;
+      font-size: 16px; margin-bottom: 14px;
+    }
+
+    .trust-title {
+      font-size: 15px; font-weight: 700;
+      letter-spacing: -0.01em; margin-bottom: 5px;
+    }
+    .trust-text { font-size: 13px; color: var(--ink-50); line-height: 1.5; }
+
+    /* ─── RESULTS ─── */
+    .results-layout {
+      display: grid; grid-template-columns: 260px 1fr;
+      gap: 28px; align-items: start;
+    }
+
+    .filters {
+      background: white; border: 1px solid var(--line);
+      border-radius: var(--r); padding: 22px;
+      position: sticky; top: 88px;
+    }
+
+    .filter-title {
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ink-50); margin-bottom: 16px;
+    }
+
+    .check-row {
+      display: flex; align-items: center; gap: 10px;
+      min-height: 36px; font-size: 14px; color: var(--ink-80);
+      border-bottom: 1px solid var(--line); cursor: pointer;
+    }
+    .check-row:last-of-type { border-bottom: 0; }
+
+    .check-row input[type=checkbox] {
+      width: 16px; height: 16px;
+      accent-color: var(--red);
+    }
+
+    .range-note {
+      margin-top: 16px; padding: 12px 14px;
+      background: #FFF8F5; border: 1px solid #F5D8CA;
+      border-radius: var(--r-sm); color: var(--amber);
+      font-size: 12px; line-height: 1.5; font-weight: 600;
+    }
+
+    .locked-budget {
+      background: var(--blue-bg); border: 1.5px solid #C5D9F5;
+      border-radius: var(--r-sm); padding: 12px 14px;
+      color: var(--blue); font-size: 13px; font-weight: 600;
+      line-height: 1.45; display: none; margin-bottom: 16px;
+    }
+    .locked-budget.active { display: block; }
+
+    /* ─── CAR CARDS ─── */
+    .cars-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 20px;
+    }
+
+    .car-card {
+      background: white; border: 1px solid var(--line);
+      border-radius: var(--r-lg); overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition: all 0.22s;
+    }
+    .car-card:hover { box-shadow: var(--shadow-elevated); transform: translateY(-2px); }
+
+    .car-card.over-budget {
+      opacity: 0.60; background: #F9F9FA; border-color: #E0E2E7;
+    }
+    .car-card.over-budget:hover { transform: none; }
+
+    .car-img {
+      width: 100%; height: 200px; object-fit: cover; display: block;
+      background: #EAECF0;
+    }
+
+    .car-body { padding: 20px 22px 22px; }
+
+    .badge-row {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-flex; align-items: center;
+      height: 22px; padding: 0 9px;
+      border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+      background: var(--surface); color: var(--ink-50);
+    }
+    .badge.green { background: var(--green-bg); color: var(--green); }
+    .badge.blue { background: var(--blue-bg); color: var(--blue); }
+    .badge.amber { background: var(--amber-bg); color: var(--amber); }
+    .badge.red { background: #FFF0EC; color: var(--red); }
+
+    .car-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: 4px;
+    }
+
+    .car-meta {
+      font-size: 13px; color: var(--ink-50);
+      margin-bottom: 16px;
+    }
+
+    .divider { height: 1px; background: var(--line); margin: 14px 0; }
+
+    .emi {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 3.5vw, 40px);
+      font-weight: 900; letter-spacing: -0.04em;
+      color: var(--red); line-height: 1;
+    }
+
+    .total-price {
+      font-size: 13px; color: var(--ink-50);
+      margin-top: 4px; margin-bottom: 6px;
+    }
+
+    .emi-option {
+      font-size: 13px; color: var(--green); font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .proof-strip {
+      padding: 10px 12px; margin-bottom: 8px;
+      background: var(--green-bg); border: 1px solid #C0E5D5;
+      border-radius: var(--r-sm); color: var(--green);
+      font-size: 12px; font-weight: 600; line-height: 1.45;
+    }
+
+    .urgency-strip {
+      padding: 10px 12px; margin-bottom: 8px;
+      background: var(--amber-bg); border: 1px solid #EDD8A4;
+      border-radius: var(--r-sm); color: var(--amber);
+      font-size: 12px; font-weight: 600; line-height: 1.45;
+    }
+
+    .over-budget-note {
+      display: none; padding: 10px 12px; margin-bottom: 10px;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--r-sm); color: var(--ink-50);
+      font-size: 12px; font-weight: 600; line-height: 1.45;
+    }
+    .car-card.over-budget .over-budget-note { display: block; }
+
+    .signals {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+      margin: 14px 0;
+    }
+
+    .signal {
+      height: 48px; border: 1px solid var(--line);
+      border-radius: var(--r-sm); background: var(--surface);
+      display: grid; place-items: center; text-align: center;
+      font-size: 11px; font-weight: 600; color: var(--ink-80);
+      padding: 4px;
+    }
+
+    .card-actions {
+      display: grid; grid-template-columns: 1fr 108px;
+      gap: 10px; margin-top: 16px;
+    }
+
+    /* ─── DETAIL ─── */
+    .detail-layout {
+      display: grid; grid-template-columns: 1fr 400px;
+      gap: 28px; align-items: start;
+    }
+
+    .gallery {
+      display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px;
+    }
+
+    .gallery-main {
+      height: 440px; width: 100%; object-fit: cover;
+      border-radius: var(--r); display: block; border: 1px solid var(--line);
+    }
+
+    .gallery-side { display: grid; gap: 10px; }
+    .gallery-side img {
+      height: 215px; width: 100%; object-fit: cover;
+      border-radius: var(--r); display: block; border: 1px solid var(--line);
+    }
+
+    .spec-grid {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 12px; margin-top: 16px;
+    }
+
+    .spec {
+      background: white; border: 1px solid var(--line);
+      border-radius: var(--r-sm); padding: 16px;
+    }
+    .spec strong { display: block; font-size: 16px; letter-spacing: -0.01em; margin-bottom: 3px; }
+    .spec span { font-size: 12px; color: var(--ink-50); }
+
+    .detail-rail {
+      background: white; border: 1px solid var(--line);
+      border-radius: var(--r-lg); padding: 28px;
+      box-shadow: var(--shadow-card);
+      position: sticky; top: 88px;
+    }
+
+    .rail-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-50); margin-bottom: 6px;
+    }
+
+    .rail-emi {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 4vw, 48px);
+      font-weight: 900; letter-spacing: -0.04em;
+      color: var(--red); line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .rail-note { font-size: 13px; color: var(--ink-50); margin-bottom: 20px; }
+
+    .breakdown {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0; margin: 18px 0;
+    }
+
+    .cost-row {
+      display: flex; justify-content: space-between;
+      padding: 6px 0; font-size: 14px; color: var(--ink-80);
+    }
+    .cost-row strong { font-weight: 600; }
+    .cost-row.total {
+      border-top: 1px solid var(--line);
+      margin-top: 8px; padding-top: 12px;
+      font-weight: 700; color: var(--ink);
+    }
+
+    .preapproved {
+      padding: 14px; border-radius: var(--r-sm);
+      background: var(--green-bg); border: 1.5px solid #C0E5D5;
+      color: var(--green); font-weight: 700;
+      font-size: 14px; margin-bottom: 12px;
+    }
+
+    .insurance {
+      padding: 14px; border-radius: var(--r-sm);
+      border: 1.5px solid #FFD7CA; background: #FFF7F5;
+      color: #7A2B10; font-size: 13px; font-weight: 600;
+      line-height: 1.5; margin-bottom: 12px;
+    }
+
+    .bundle-card {
+      padding: 14px; border-radius: var(--r-sm);
+      border: 1.5px solid #C5D9F5; background: var(--blue-bg);
+      color: var(--blue); font-size: 13px; font-weight: 600;
+      line-height: 1.5; margin-bottom: 14px;
+    }
+
+    .secondary-actions {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-top: 10px;
+    }
+
+    /* ─── LOAN SECTION ─── */
+    .loan-grid, .swap-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 18px;
+    }
+
+    .loan-box, .swap-box {
+      background: white; border: 1px solid var(--line);
+      border-radius: var(--r-lg); padding: 28px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .step-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px;
+      border-radius: 50%; background: #FFF0EC;
+      color: var(--red); font-weight: 800; font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .loan-box h3, .swap-box h3 { margin-bottom: 10px; }
+    .loan-box p, .swap-box p {
+      font-size: 14px; color: var(--ink-50);
+      line-height: 1.65; margin-bottom: 16px; font-weight: 300;
+    }
+
+    .mini-field {
+      width: 100%; height: 46px;
+      border: 1.5px solid var(--line);
+      border-radius: var(--r-sm); padding: 0 14px;
+      margin-bottom: 10px; background: var(--surface);
+      font-size: 14px; transition: border-color 0.18s;
+    }
+    .mini-field:focus { outline: none; border-color: var(--red); background: white; }
+
+    .approval-card {
+      border: 1.5px solid #B8E0CE; background: var(--green-bg);
+      color: var(--green); border-radius: var(--r-sm);
+      padding: 18px; font-weight: 700; margin-top: 8px;
+      font-size: 14px; line-height: 1.5;
+    }
+    .approval-card span {
+      display: block; font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 900;
+      letter-spacing: -0.04em; margin: 4px 0;
+    }
+
+    /* ─── SWAP SECTION ─── */
+    .swap-math { margin-top: 14px; }
+    .math-row {
+      display: flex; justify-content: space-between;
+      padding: 8px 0; font-weight: 600; font-size: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .math-row:last-child {
+      border-bottom: 0; color: var(--red);
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700; letter-spacing: -0.03em;
+    }
+
+    /* ─── BOTTOM CTA ─── */
+    .bottom-cta {
+      background: var(--ink); color: white; padding: 72px 0;
+    }
+    .bottom-grid {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 32px; align-items: center;
+    }
+    .bottom-cta h2 { color: white; }
+    .bottom-cta p { color: rgba(255,255,255,0.60); margin-top: 12px; font-weight: 300; font-size: 16px; }
+    .bottom-cta .btn-primary { height: 52px; padding: 0 32px; font-size: 16px; }
+
+    /* ─── MODAL ─── */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(5,6,9,0.70);
+      z-index: 200; display: none;
+      align-items: center; justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .modal-backdrop.active { display: flex; }
+
+    .modal {
+      width: min(480px, 100%); background: white;
+      border-radius: var(--r-lg); padding: 32px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.35);
+    }
+
+    .modal h3 {
+      font-size: 26px; margin-bottom: 10px;
+    }
+    .modal p {
+      font-size: 14px; color: var(--ink-50);
+      line-height: 1.6; margin-bottom: 16px;
+    }
+
+    .modal .proof-strip { margin-bottom: 20px; }
+
+    .modal-actions {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1040px) {
+      .nav-links { display: none; }
+      .hero-grid, .results-layout, .detail-layout, .bottom-grid { grid-template-columns: 1fr; }
+      .filters, .detail-rail { position: static; }
+      .trust-strip, .loan-grid, .swap-grid, .spec-grid { grid-template-columns: repeat(2,1fr); }
+    }
+
+    @media (max-width: 700px) {
+      .wrap { padding: 0 16px; }
+      .hero { min-height: auto; }
+      .hero-grid { padding: 48px 0 52px; }
+      .cars-grid, .gallery, .quick-segments { grid-template-columns: 1fr; }
+      .section { padding: 52px 0; }
+      .section-head { flex-direction: column; align-items: flex-start; }
+      .trust-strip, .loan-grid, .swap-grid, .spec-grid { grid-template-columns: 1fr; }
+      .card-actions, .secondary-actions, .modal-actions { grid-template-columns: 1fr; }
+      .gallery-main, .gallery-side img { height: 220px; }
+      .nav-actions .btn-ghost { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── TOPBAR ─── -->
+  <header class="topbar">
+    <div class="wrap">
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#" class="brand" aria-label="CarDekho Finance">
+          <div class="brand-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M5 11l1.5-4.5h11L19 11M17 16a1.5 1.5 0 01-3 0 1.5 1.5 0 013 0zm-8 0a1.5 1.5 0 01-3 0 1.5 1.5 0 013 0zM3 11h18v6H3z"/></svg>
+          </div>
+          Car<span>Dekho</span>
+        </a>
+        <div class="nav-links" aria-label="Site sections">
+          <a class="nav-link" href="#results">Browse Cars</a>
+          <a class="nav-link" href="#loan">Check Eligibility</a>
+          <a class="nav-link" href="#details">Car Details</a>
+          <a class="nav-link" href="#upgrade">Upgrade</a>
+        </div>
+        <div class="nav-actions">
+          <button class="btn btn-ghost">Sign in</button>
+          <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Get Pre-Approved</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ─── HERO ─── -->
+    <section class="hero" aria-label="Hero">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">Finance-First Car Buying</div>
+            <h1>Know your<br>EMI before<br>you browse.</h1>
+            <p class="hero-copy">Set your monthly budget. See only what you can actually afford — with full cost transparency, zero CIBIL impact, and 48-hour delivery.</p>
+            <div class="api-status" id="apiStatus" role="status" aria-live="polite">
+              Connecting to affordability engine…
+            </div>
+          </div>
+
+          <!-- Search Panel -->
+          <div class="search-panel" role="search" aria-label="Car search and budget">
+            <div class="panel-label">Find your car</div>
+
+            <div class="tabs" role="tablist" aria-label="Car type">
+              <button class="tab active" role="tab" aria-selected="true">Used Cars</button>
+              <button class="tab" role="tab" aria-selected="false">New Cars</button>
+              <button class="tab" role="tab" aria-selected="false">Exchange</button>
+            </div>
+
+            <label class="field-label" for="budget">Monthly EMI Budget</label>
+            <div class="budget-display" id="budgetText" aria-live="polite">₹8,000/month</div>
+            <input class="budget-slider" type="range" id="budget"
+              min="3000" max="30000" value="8000" step="500"
+              aria-label="Monthly EMI budget slider">
+            <p class="microcopy">Drag to set your comfortable monthly payment. Cars above this will be flagged — not hidden.</p>
+
+            <div class="quick-segments" role="group" aria-label="Buyer intent">
+              <button class="segment active">🚗 First-time buyer</button>
+              <button class="segment">⚡ Urgent need</button>
+              <button class="segment">🔄 Upgrading</button>
+              <button class="segment">🔍 Just browsing</button>
+            </div>
+
+            <div class="loan-note">
+              Pre-check shows your real loan eligibility in 2 minutes, with no CIBIL impact.
+            </div>
+
+            <button class="btn btn-primary" style="width:100%;height:52px;font-size:15px;"
+              onclick="document.getElementById('results').scrollIntoView({behavior:'smooth'})">
+              Show matching cars →
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TRUST STRIP ─── -->
+    <section class="section alt" aria-label="Trust signals">
+      <div class="wrap">
+        <div class="section-head" style="margin-bottom:28px;">
+          <div>
+            <div class="section-label">Why CarDekho Finance</div>
+            <h2>Buying a car is complex.<br>We made it legible.</h2>
+          </div>
+        </div>
+        <div class="trust-strip" role="list">
+          <div class="trust-item" role="listitem">
+            <div class="trust-icon" aria-hidden="true">✓</div>
+            <div class="trust-title">RC Verified via Vahan</div>
+            <p class="trust-text">Every car's registration checked in real-time against government records.</p>
+          </div>
+          <div class="trust-item" role="listitem">
+            <div class="trust-icon" aria-hidden="true">🔒</div>
+            <div class="trust-title">No CIBIL Impact</div>
+            <p class="trust-text">Our soft-check tells you exactly what loan you qualify for — without a hard inquiry.</p>
+          </div>
+          <div class="trust-item" role="listitem">
+            <div class="trust-icon" aria-hidden="true">⚡</div>
+            <div class="trust-title">48-Hour Delivery</div>
+            <p class="trust-text">Fast Track stock delivered to your door with insurance activated on the same day.</p>
+          </div>
+          <div class="trust-item" role="listitem">
+            <div class="trust-icon" aria-hidden="true">₹</div>
+            <div class="trust-title">Full Cost Transparency</div>
+            <p class="trust-text">RTO, insurance, and processing fees shown upfront. No hidden charges at the dealer.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── CAR RESULTS ─── -->
+    <section class="section" id="results" aria-label="Car listings">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-label">Matching Inventory</div>
+            <h2>Cars within your budget.</h2>
+            <p class="section-sub">Sorted by EMI fit. Cars above your budget are visible but clearly marked — you decide, not the algorithm.</p>
+          </div>
+        </div>
+
+        <div class="results-layout">
+          <aside class="filters" aria-label="Filter options">
+            <div class="filter-title">Filters</div>
+            <div class="locked-budget" id="lockedBudget" role="status">—</div>
+            <label class="check-row"><input type="checkbox" checked> RC verified only</label>
+            <label class="check-row"><input type="checkbox" checked> No accident history</label>
+            <label class="check-row"><input type="checkbox" checked> Insurance available</label>
+            <label class="check-row"><input type="checkbox" checked> No CIBIL-impact eligibility</label>
+            <label class="check-row"><input type="checkbox" checked> Delivery in 48 hrs</label>
+            <label class="check-row"><input type="checkbox" checked> Fast moving cars</label>
+            <label class="check-row"><input type="checkbox" checked> Lowest EMI cars</label>
+            <label class="check-row"><input type="checkbox">Best value deals</label>
+            <div class="range-note">Verification, delivery, and EMI fit stay visible as you compare.</div>
+          </aside>
+
+          <div class="cars-grid" role="list">
+            <!-- Card 1 -->
+            <article class="car-card" role="listitem">
+              <img class="car-img" src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=900&q=80" alt="Hyundai i20 Sportz">
+              <div class="car-body">
+                <div class="badge-row">
+                  <span class="badge green">RC verified</span>
+                  <span class="badge green">No accident</span>
+                  <span class="badge blue">1 owner</span>
+                  <span class="badge amber">48 hrs delivery</span>
+                </div>
+                <h3 class="car-title">Hyundai i20 Sportz</h3>
+                <div class="car-meta">2019 · Petrol · Manual · 32,000 km</div>
+                <div class="divider"></div>
+                <div class="emi">₹7,800<span style="font-size:18px;font-weight:400;">/mo</span></div>
+                <div class="total-price">₹5.10L on-road total</div>
+                <div class="emi-option">↓ ₹6,900/month with ₹50K down payment</div>
+                <div class="proof-strip">RC status verified via Vahan · Checked 2 hrs ago</div>
+                <div class="urgency-strip">Fast moving in Delhi NCR · Recently added</div>
+                <div class="over-budget-note">Above your locked budget: requires ₹0 extra/month</div>
+                <div class="signals" role="list">
+                  <div class="signal" role="listitem">Vahan checked</div>
+                  <div class="signal" role="listitem">Charge protection</div>
+                  <div class="signal" role="listitem">Pre-approved lead</div>
+                </div>
+                <div class="card-actions">
+                  <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
+                  <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="car-card" role="listitem">
+              <img class="car-img" src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80" alt="Maruti Swift VXI">
+              <div class="car-body">
+                <div class="badge-row">
+                  <span class="badge green">RC verified</span>
+                  <span class="badge green">No accident</span>
+                  <span class="badge blue">1 owner</span>
+                  <span class="badge red">Fast Track</span>
+                </div>
+                <h3 class="car-title">Maruti Swift VXI</h3>
+                <div class="car-meta">2020 · Petrol · Manual · 28,500 km</div>
+                <div class="divider"></div>
+                <div class="emi">₹6,950<span style="font-size:18px;font-weight:400;">/mo</span></div>
+                <div class="total-price">₹4.55L on-road total</div>
+                <div class="emi-option">↓ ₹6,250/month with ₹45K down payment</div>
+                <div class="urgency-strip">Fast Track stock · Delivery window available</div>
+                <div class="over-budget-note">Above your locked budget: requires ₹0 extra/month</div>
+                <div class="signals" role="list">
+                  <div class="signal" role="listitem">Clean title</div>
+                  <div class="signal" role="listitem">48 hr handover</div>
+                  <div class="signal" role="listitem">Pack ₹4,999/yr</div>
+                </div>
+                <div class="card-actions">
+                  <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
+                  <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="car-card" role="listitem">
+              <img class="car-img" src="https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=900&q=80" alt="Tata Nexon XZ+">
+              <div class="car-body">
+                <div class="badge-row">
+                  <span class="badge green">RC verified</span>
+                  <span class="badge green">No accident</span>
+                  <span class="badge blue">2 owners</span>
+                  <span class="badge amber">Inspection ready</span>
+                </div>
+                <h3 class="car-title">Tata Nexon XZ+</h3>
+                <div class="car-meta">2021 · Petrol · Manual · 41,000 km</div>
+                <div class="divider"></div>
+                <div class="emi">₹9,400<span style="font-size:18px;font-weight:400;">/mo</span></div>
+                <div class="total-price">₹6.35L on-road total</div>
+                <div class="emi-option">↓ ₹8,300/month with ₹70K down payment</div>
+                <div class="urgency-strip">High interest in your city · EMI above approved band</div>
+                <div class="over-budget-note">Above your locked budget: requires about ₹1,300 extra/month</div>
+                <div class="signals" role="list">
+                  <div class="signal" role="listitem">Third-party check</div>
+                  <div class="signal" role="listitem">No pending loan</div>
+                  <div class="signal" role="listitem">Warranty add-on</div>
+                </div>
+                <div class="card-actions">
+                  <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
+                  <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 4 -->
+            <article class="car-card" role="listitem">
+              <img class="car-img" src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=900&q=80" alt="Honda City VX">
+              <div class="car-body">
+                <div class="badge-row">
+                  <span class="badge green">RC verified</span>
+                  <span class="badge green">No accident</span>
+                  <span class="badge blue">1 owner</span>
+                  <span class="badge amber">Metro stock</span>
+                </div>
+                <h3 class="car-title">Honda City VX</h3>
+                <div class="car-meta">2018 · Petrol · Automatic · 39,800 km</div>
+                <div class="divider"></div>
+                <div class="emi">₹8,700<span style="font-size:18px;font-weight:400;">/mo</span></div>
+                <div class="total-price">₹5.85L on-road total</div>
+                <div class="emi-option">↓ ₹7,650/month with ₹60K down payment</div>
+                <div class="urgency-strip">Recently added automatic sedan · EMI above approved band</div>
+                <div class="over-budget-note">Above your locked budget: requires about ₹600 extra/month</div>
+                <div class="signals" role="list">
+                  <div class="signal" role="listitem">RTO shown</div>
+                  <div class="signal" role="listitem">Dealer masked</div>
+                  <div class="signal" role="listitem">12 month cover</div>
+                </div>
+                <div class="card-actions">
+                  <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
+                  <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── DETAIL ─── -->
+    <section class="section alt" id="details" aria-label="Car detail view">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-label">Full Detail</div>
+            <h2>One car. Full cost.<br>Clear next step.</h2>
+            <p class="section-sub">The detail page leads with monthly impact, transparent total cost, default protection, and dealer access only after pre-check.</p>
+          </div>
+        </div>
+
+        <div class="detail-layout">
+          <div>
+            <div class="gallery">
+              <img class="gallery-main" src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1000&q=80" alt="Selected car front view">
+              <div class="gallery-side">
+                <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=700&q=80" alt="Car interior">
+                <img src="https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=700&q=80" alt="Car on road">
+              </div>
+            </div>
+            <div class="spec-grid">
+              <div class="spec"><strong>32,000 km</strong><span>Odometer verified</span></div>
+              <div class="spec"><strong>Petrol</strong><span>Manual transmission</span></div>
+              <div class="spec"><strong>1 owner</strong><span>RC matched</span></div>
+              <div class="spec"><strong>48 hrs</strong><span>Fast Track delivery</span></div>
+            </div>
+          </div>
+
+          <aside class="detail-rail" aria-label="Finance and purchase options">
+            <div class="rail-label">Monthly Payment</div>
+            <div class="rail-emi">₹7,800/mo</div>
+            <div class="emi-option">↓ ₹6,900/mo with ₹50K down</div>
+            <div class="rail-note">Estimated for 7 years. Full cost breakdown below.</div>
+            <div class="urgency-strip">Pre-check can reduce your EMI by up to ₹900/month before dealer contact.</div>
+            <button class="btn btn-primary" style="width:100%;height:52px;font-size:15px;"
+              onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">
+              Check Eligibility
+            </button>
+            <div class="breakdown">
+              <div class="cost-row"><span>Car price</span><strong>₹5,10,000</strong></div>
+              <div class="cost-row"><span>RTO charges</span><strong>₹18,000</strong></div>
+              <div class="cost-row"><span>Insurance</span><strong>₹12,000</strong></div>
+              <div class="cost-row"><span>Processing fee</span><strong>₹3,500</strong></div>
+              <div class="cost-row total"><span>Total outflow</span><strong>₹5,43,500</strong></div>
+            </div>
+            <div class="preapproved">Estimated loan approved: ₹4,50,000</div>
+            <div class="insurance">Included by default: Insurance + warranty pack at ₹4,999/year. You can remove it, but it is not recommended.</div>
+            <div class="bundle-card">Default pack: insurance quote, warranty cover, RC transfer status, claim support handoff.</div>
+            <div class="secondary-actions">
+              <button class="btn btn-ghost">Book Test Drive</button>
+              <button class="btn btn-ghost" onclick="openDealerGate()">Call Dealer</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── LOAN ─── -->
+    <section class="section" id="loan" aria-label="Loan eligibility check">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-label">Loan Eligibility</div>
+            <h2>Loan first,<br>browsing second.</h2>
+            <p class="section-sub">A short soft-check creates an approved EMI band before you spend time on cars you cannot buy.</p>
+          </div>
+        </div>
+
+        <div class="loan-grid">
+          <div class="loan-box">
+            <div class="step-num">1</div>
+            <h3>Soft eligibility</h3>
+            <p>Only three low-friction inputs before you see a finance answer.</p>
+            <input class="mini-field" id="monthlyIncome" value="55000" aria-label="Monthly income" placeholder="Monthly income (₹)">
+            <select class="mini-field" aria-label="Employment type">
+              <option>Salaried</option>
+              <option>Self-employed</option>
+            </select>
+            <input class="mini-field" id="existingEmis" value="0" aria-label="Existing monthly EMI" placeholder="Existing EMI (₹0 if none)">
+            <input class="mini-field" id="cityInput" value="Delhi NCR" aria-label="City" placeholder="Your city">
+          </div>
+
+          <div class="loan-box">
+            <div class="step-num">2</div>
+            <h3>Approval range</h3>
+            <p>No full application. No CIBIL impact. Just a real eligibility number.</p>
+            <div class="approval-card">
+              You are eligible for
+              <span>₹4.5L loan</span>
+              EMI fit: ₹7,200–₹8,100/month
+            </div>
+            <button class="btn btn-primary" style="width:100%;height:48px;margin-top:14px;"
+              onclick="runEligibility()">
+              Run soft-check
+            </button>
+          </div>
+
+          <div class="loan-box">
+            <div class="step-num">3</div>
+            <h3>Select car</h3>
+            <p>Now the marketplace opens around real affordability. Cars above budget stay visible but clearly show the extra EMI needed.</p>
+            <div class="badge-row">
+              <span class="badge green">Hyundai i20 fits</span>
+              <span class="badge green">Swift fits</span>
+              <span class="badge amber">Nexon +₹1,300/mo</span>
+            </div>
+            <button class="btn btn-primary" style="width:100%;height:48px;margin-top:auto;"
+              onclick="document.getElementById('results').scrollIntoView({behavior:'smooth'})">
+              Continue to matching cars →
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── UPGRADE / SWAP ─── -->
+    <section class="section alt" id="upgrade" aria-label="Car upgrade">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-label">Car Upgrade</div>
+            <h2>Upgrade without<br>double EMI.</h2>
+            <p class="section-sub">Selling, buying, loan top-up, RC transfer, and insurance are coordinated as one handover.</p>
+          </div>
+        </div>
+
+        <div class="swap-grid">
+          <div class="swap-box">
+            <div class="step-num">1</div>
+            <h3>Sell your car</h3>
+            <p>Instant price range with a market benchmark — not a blind callback.</p>
+            <div class="approval-card">
+              Swift VXI estimate
+              <span>₹2.9L–₹3.2L</span>
+              Dealer bids open today
+            </div>
+          </div>
+
+          <div class="swap-box">
+            <div class="step-num">2</div>
+            <h3>Coordinated handover</h3>
+            <p>Old car pick-up, RC transfer, insurance activation, and loan top-up — all on delivery day.</p>
+            <div class="badge-row">
+              <span class="badge green">Old car pickup</span>
+              <span class="badge green">RC transfer</span>
+              <span class="badge green">Insurance live</span>
+              <span class="badge blue">Loan top-up</span>
+              <span class="badge red">No double EMI</span>
+            </div>
+          </div>
+
+          <div class="swap-box">
+            <div class="step-num">3</div>
+            <h3>Net EMI</h3>
+            <p>The decision is framed as incremental monthly affordability — not total price.</p>
+            <div class="swap-math">
+              <div class="math-row"><span>Sell</span><span>₹3L</span></div>
+              <div class="math-row"><span>Buy</span><span>₹6L</span></div>
+              <div class="math-row"><span>Loan needed</span><span>₹3L</span></div>
+              <div class="math-row"><span>Net EMI</span><span>₹5,200/mo</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── BOTTOM CTA ─── -->
+    <section class="bottom-cta" aria-label="Call to action">
+      <div class="wrap bottom-grid">
+        <div>
+          <h2>Premium surface.<br>Stronger revenue path.</h2>
+          <p>Finance, insurance, delivery, and dealer quality now work as one purchase system.</p>
+        </div>
+        <button class="btn btn-primary"
+          onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">
+          Start with eligibility →
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ─── MODAL ─── -->
+  <div class="modal-backdrop" id="dealerGate" role="dialog" aria-modal="true" aria-labelledby="dealerGateTitle">
+    <div class="modal">
+      <h3 id="dealerGateTitle">Check eligibility first to lower your EMI</h3>
+      <p>Pre-approved buyers close faster for dealers and keep financing inside CarDekho. Skipping the check may cost up to ₹900/month.</p>
+      <div class="proof-strip">No CIBIL impact · 2-minute soft check · Dealer sees a pre-approved buyer</div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="closeDealerGate(); document.getElementById('loan').scrollIntoView({behavior:'smooth'});">Check Eligibility</button>
+        <button class="btn btn-ghost" onclick="closeDealerGate()">Continue without</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const budgetEl   = document.getElementById('budget');
+    const budgetText = document.getElementById('budgetText');
+    const lockedBudget = document.getElementById('lockedBudget');
+    const dealerGate = document.getElementById('dealerGate');
+    const apiStatus  = document.getElementById('apiStatus');
+    // In production, REPLACE this with your Render backend URL:
+    // e.g. 'https://cardekho-backend.onrender.com'
+    const API_BASE = window.CARDEKHO_API_BASE || 'https://cardekho-backend.onrender.com';
+    const sessionId  = localStorage.getItem('cd_session_id') || crypto.randomUUID();
+    localStorage.setItem('cd_session_id', sessionId);
+
+    function formatInr(v) {
+      const n = Number(String(v).replace(/[^0-9]/g,'')) || 0;
+      return '₹' + n.toLocaleString('en-IN') + '/month';
+    }
+
+    // Live budget display + slider gradient
+    budgetEl.addEventListener('input', () => {
+      budgetText.textContent = formatInr(budgetEl.value);
+      const pct = ((budgetEl.value - budgetEl.min) / (budgetEl.max - budgetEl.min)) * 100;
+      budgetEl.style.background = `linear-gradient(to right, var(--red) ${pct}%, var(--line) ${pct}%)`;
+    });
+
+    document.querySelectorAll('.segment').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.segment').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    function numeric(v) { return Number(String(v||'').replace(/[^0-9]/g,'')) || 0; }
+
+    function selectedSegment() {
+      const t = document.querySelector('.segment.active')?.textContent.trim().toLowerCase() || '';
+      if (t.includes('urgent')) return 'urgent';
+      if (t.includes('upgrade')) return 'upgrade';
+      if (t.includes('browsing')) return 'explorer';
+      return 'first_time';
+    }
+
+    async function api(path, payload) {
+      const r = await fetch(API_BASE + path, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if (!r.ok) throw new Error('API failed: ' + path);
+      return r.json();
+    }
+
+    async function logEvent(ev) {
+      try {
+        await api('/api/events', {
+          sessionId, buyerType: selectedSegment(),
+          monthlyBudget: numeric(budgetEl.value), ...ev
+        });
+      } catch {}
+    }
+
+    function applyMatches(result) {
+      const cards = document.querySelectorAll('.car-card');
+      const map = new Map(result.cars.map(c => [c.name, c]));
+      cards.forEach(card => {
+        const name = card.querySelector('.car-title')?.textContent.trim();
+        const car = map.get(name);
+        card.classList.remove('over-budget');
+        if (!car) return;
+        const note = card.querySelector('.over-budget-note');
+        if (note && car.fit.extraEmi > 0)
+          note.textContent = `Above your locked budget: requires about ₹${car.fit.extraEmi.toLocaleString('en-IN')} extra/month`;
+        if (car.fit.status !== 'FIT') card.classList.add('over-budget');
+      });
+    }
+
+    async function runEligibility() {
+      const payload = {
+        userId: sessionId,
+        monthlyIncome: numeric(document.getElementById('monthlyIncome').value),
+        existingEmis: numeric(document.getElementById('existingEmis').value),
+        monthlyBudget: numeric(budgetEl.value),
+        city: document.getElementById('cityInput').value || 'Delhi NCR',
+        creditRange: '650-750',
+        intent: { segment: selectedSegment(), visits: Number(localStorage.getItem('cd_visits')||1), budgetChanges: Number(localStorage.getItem('cd_budget_changes')||0) }
+      };
+      try {
+        const aff = await api('/api/affordability', payload);
+        const match = await api('/api/match', {...payload, affordability: aff});
+        lockedBudget.textContent = `Eligibility checked — safe EMI band: ₹${aff.safeEmiRange.min.toLocaleString('en-IN')}–₹${aff.safeEmiRange.max.toLocaleString('en-IN')}/month.`;
+        document.querySelector('.approval-card').innerHTML = `You are eligible for<span>₹${Math.round(aff.maxLoan/100000*10)/10}L loan</span>EMI fit: ₹${aff.safeEmiRange.min.toLocaleString('en-IN')}–₹${aff.safeEmiRange.max.toLocaleString('en-IN')}/month`;
+        applyMatches(match);
+        lockedBudget.classList.add('active');
+        await logEvent({ eventType:'eligibility_check', safeEmiMin:aff.safeEmiRange.min, safeEmiMax:aff.safeEmiRange.max, cta:'run_soft_check' });
+        document.getElementById('results').scrollIntoView({behavior:'smooth'});
+      } catch {
+        lockBudget();
+      }
+    }
+
+    function lockBudget() {
+      lockedBudget.textContent = 'Budget locked. Cars above this band are marked — click any card to check eligibility.';
+      lockedBudget.classList.add('active');
+      document.querySelectorAll('.car-card').forEach(c => c.classList.remove('over-budget'));
+      const cards = document.querySelectorAll('.car-card');
+      if (cards[2]) cards[2].classList.add('over-budget');
+      if (cards[3]) cards[3].classList.add('over-budget');
+      document.getElementById('results').scrollIntoView({behavior:'smooth'});
+    }
+
+    function openDealerGate() {
+      dealerGate.classList.add('active');
+      logEvent({ eventType:'dealer_gate', cta:'call_dealer' });
+    }
+
+    function closeDealerGate() { dealerGate.classList.remove('active'); }
+
+    dealerGate.addEventListener('click', e => { if (e.target === dealerGate) closeDealerGate(); });
+
+    localStorage.setItem('cd_visits', String(Number(localStorage.getItem('cd_visits')||0)+1));
+    budgetEl.addEventListener('change', () => {
+      localStorage.setItem('cd_budget_changes', String(Number(localStorage.getItem('cd_budget_changes')||0)+1));
+    });
+
+    async function checkBackend() {
+      try {
+        const r = await fetch(API_BASE + '/api/health');
+        if (!r.ok) throw new Error();
+        apiStatus.textContent = 'Affordability engine active';
+        apiStatus.classList.remove('offline'); apiStatus.classList.add('connected');
+      } catch {
+        apiStatus.textContent = 'Offline · Static fallback active';
+        apiStatus.classList.add('offline'); apiStatus.classList.remove('connected');
+      }
+    }
+    checkBackend();
+
+    // ─── Full Funnel Tracking ─────────────────────────────────────────────
+    // Track page_view on load
+    logEvent({ eventType: 'page_view', page: 'home', cta: 'landing' });
+
+    // Track car_click on any car card
+    document.querySelectorAll('.car-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const name = card.querySelector('.car-title')?.textContent.trim() || '';
+        logEvent({ eventType: 'car_click', carName: name, cta: 'car_card' });
+      });
+    });
+  </script>
+</body>
+</html>
