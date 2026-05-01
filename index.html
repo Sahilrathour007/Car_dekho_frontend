@@ -654,55 +654,6 @@
       letter-spacing: -0.04em; margin: 4px 0;
     }
 
-    .probability-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 8px; margin-top: 12px;
-    }
-
-    .probability-pill {
-      border: 1px solid #C0E5D5;
-      border-radius: var(--r-sm);
-      background: rgba(255,255,255,0.62);
-      padding: 10px;
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.35;
-    }
-
-    .lender-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .lender-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--r-sm);
-      background: white;
-      font-size: 12px;
-      color: var(--ink-80);
-    }
-
-    .lock-token {
-      display: none;
-      margin-top: 14px;
-      padding: 12px 14px;
-      border: 1.5px solid #FFD7CA;
-      border-radius: var(--r-sm);
-      background: #FFF7F5;
-      color: #7A2B10;
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
-    .lock-token.active { display: block; }
-
     /* ─── SWAP SECTION ─── */
     .swap-math { margin-top: 14px; }
     .math-row {
@@ -943,9 +894,16 @@
                   <div class="signal" role="listitem">Charge protection</div>
                   <div class="signal" role="listitem">Pre-approved lead</div>
                 </div>
-                <div class="card-actions">
+                <div class="card-actions pre-check-actions">
                   <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
                   <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+                <div class="card-actions post-check-actions" style="display:none;flex-direction:column;gap:8px;">
+                  <button class="btn btn-primary" style="width:100%;" onclick="lockAndCall(this,'Hyundai i20 Sportz')">🔒 Lock this rate &amp; Call Dealer</button>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                    <button class="btn btn-ghost" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Re-check</button>
+                  </div>
                 </div>
               </div>
             </article>
@@ -973,9 +931,16 @@
                   <div class="signal" role="listitem">48 hr handover</div>
                   <div class="signal" role="listitem">Pack ₹4,999/yr</div>
                 </div>
-                <div class="card-actions">
+                <div class="card-actions pre-check-actions">
                   <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
                   <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+                <div class="card-actions post-check-actions" style="display:none;flex-direction:column;gap:8px;">
+                  <button class="btn btn-primary" style="width:100%;" onclick="lockAndCall(this,'Maruti Swift VXI')">🔒 Lock this rate &amp; Call Dealer</button>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                    <button class="btn btn-ghost" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Re-check</button>
+                  </div>
                 </div>
               </div>
             </article>
@@ -1003,9 +968,16 @@
                   <div class="signal" role="listitem">No pending loan</div>
                   <div class="signal" role="listitem">Warranty add-on</div>
                 </div>
-                <div class="card-actions">
+                <div class="card-actions pre-check-actions">
                   <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
                   <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+                <div class="card-actions post-check-actions" style="display:none;flex-direction:column;gap:8px;">
+                  <button class="btn btn-primary" style="width:100%;" onclick="lockAndCall(this,'Tata Nexon XZ+')">🔒 Lock this rate &amp; Call Dealer</button>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                    <button class="btn btn-ghost" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Re-check</button>
+                  </div>
                 </div>
               </div>
             </article>
@@ -1033,9 +1005,16 @@
                   <div class="signal" role="listitem">Dealer masked</div>
                   <div class="signal" role="listitem">12 month cover</div>
                 </div>
-                <div class="card-actions">
+                <div class="card-actions pre-check-actions">
                   <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
                   <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+                <div class="card-actions post-check-actions" style="display:none;flex-direction:column;gap:8px;">
+                  <button class="btn btn-primary" style="width:100%;" onclick="lockAndCall(this,'Honda City VX')">🔒 Lock this rate &amp; Call Dealer</button>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                    <button class="btn btn-ghost" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Re-check</button>
+                  </div>
                 </div>
               </div>
             </article>
@@ -1089,7 +1068,7 @@
               <div class="cost-row"><span>Processing fee</span><strong>₹3,500</strong></div>
               <div class="cost-row total"><span>Total outflow</span><strong>₹5,43,500</strong></div>
             </div>
-            <div class="preapproved">Estimated lender range appears after soft-check. Dealer contact stays gated until the lock token is created.</div>
+            <div class="preapproved">Estimated loan approved: ₹4,50,000</div>
             <div class="insurance">Included by default: Insurance + warranty pack at ₹4,999/year. You can remove it, but it is not recommended.</div>
             <div class="bundle-card">Default pack: insurance quote, warranty cover, RC transfer status, claim support handoff.</div>
             <div class="secondary-actions">
@@ -1113,61 +1092,64 @@
         </div>
 
         <div class="loan-grid">
+          <!-- Step 1: Inputs with labels -->
           <div class="loan-box">
             <div class="step-num">1</div>
-            <h3>Soft eligibility</h3>
-            <p>Soft-check signals lenders actually use. No hard bureau pull.</p>
-            <input class="mini-field" id="monthlyIncome" value="55000" aria-label="Monthly income" placeholder="Monthly income (₹)">
-            <select class="mini-field" id="employmentType" aria-label="Employment type">
-              <option>Salaried</option>
-              <option>MNC / listed company</option>
-              <option>Government / PSU</option>
-              <option>Self-employed</option>
+            <h3>Your details</h3>
+            <p>Six quick inputs. No CIBIL impact. No hard bureau pull.</p>
+            <label class="field-label" for="monthlyIncome" style="margin-top:2px;">Monthly Income (₹)</label>
+            <input class="mini-field" id="monthlyIncome" value="55000" placeholder="e.g. 55000">
+            <label class="field-label" for="employmentType">Employment Type</label>
+            <select class="mini-field" id="employmentType">
+              <option value="Salaried">Salaried</option>
+              <option value="MNC / listed company">MNC / Listed Company</option>
+              <option value="Government / PSU">Government / PSU</option>
+              <option value="Self-employed">Self-employed / Business</option>
             </select>
-            <input class="mini-field" id="existingEmis" value="0" aria-label="Existing monthly EMI" placeholder="Existing EMI (₹0 if none)">
-            <input class="mini-field" id="ageInput" value="31" aria-label="Age" placeholder="Age">
-            <input class="mini-field" id="jobStability" value="24" aria-label="Job stability in months" placeholder="Job stability (months)">
-            <select class="mini-field" id="bureauScore" aria-label="Bureau score estimate">
-              <option value="700">Bureau proxy: 680-720</option>
-              <option value="780">Bureau proxy: 750+</option>
-              <option value="630">Bureau proxy: 600-660</option>
-              <option value="580">Thin / no bureau</option>
+            <label class="field-label" for="existingEmis">Existing EMIs per month (₹)</label>
+            <input class="mini-field" id="existingEmis" value="0" placeholder="₹0 if none">
+            <label class="field-label" for="ageInput">Your Age</label>
+            <input class="mini-field" id="ageInput" value="31" placeholder="e.g. 28">
+            <label class="field-label" for="jobStability">Job Stability (months in current job)</label>
+            <input class="mini-field" id="jobStability" value="24" placeholder="e.g. 24">
+            <label class="field-label" for="bureauScore">CIBIL / Credit Score (approx.)</label>
+            <select class="mini-field" id="bureauScore">
+              <option value="700">680–720 (Good)</option>
+              <option value="780">750+ (Excellent)</option>
+              <option value="630">600–660 (Fair)</option>
+              <option value="580">No bureau / new to credit</option>
             </select>
-            <input class="mini-field" id="cityInput" value="Delhi NCR" aria-label="City" placeholder="Your city">
+            <label class="field-label" for="cityInput">Your City</label>
+            <input class="mini-field" id="cityInput" value="Delhi NCR" placeholder="e.g. Mumbai, Delhi NCR">
           </div>
 
+          <!-- Step 2: Approval result -->
           <div class="loan-box">
             <div class="step-num">2</div>
-            <h3>Approval range</h3>
-            <p>Estimated range, probability, confidence, and lender variation.</p>
-            <div class="approval-card">
-              Estimated range
-              <span>Rs 3.8L - Rs 4.6L</span>
-              Medium confidence before document verification
-              <div class="probability-grid">
-                <div class="probability-pill">Rs 4.5L<br>62%</div>
-                <div class="probability-pill">Rs 4.0L<br>85%</div>
-                <div class="probability-pill">Rs 3.8L<br>90%</div>
-              </div>
+            <h3>Your approval range</h3>
+            <p>Your personalised loan estimate and EMI band — calculated from your details.</p>
+            <div class="approval-card" id="approvalCard">
+              Fill your details and click Run soft-check to see your estimated range.
             </div>
             <div class="lender-list" id="lenderList" aria-live="polite"></div>
-            <div class="lock-token" id="lockToken"></div>
+            <div id="eligibilityVerdict" style="display:none;margin-top:12px;padding:14px;border-radius:8px;font-size:14px;font-weight:700;line-height:1.5;"></div>
             <button class="btn btn-primary" style="width:100%;height:48px;margin-top:14px;"
               onclick="runEligibility()">
-              Run soft-check
+              Run soft-check →
             </button>
           </div>
 
+          <!-- Step 3: Go to matching cars (no lock token box here) -->
           <div class="loan-box">
             <div class="step-num">3</div>
-            <h3>Lock and route</h3>
-            <p>Lock the rate signal for 24 hours, capture the buyer, then route to inventory before dealer contact.</p>
-            <div class="badge-row">
-              <span class="badge green">Soft check only</span>
-              <span class="badge blue">Token valid 24 hrs</span>
-              <span class="badge amber">Dealer gated</span>
+            <h3>See matching cars</h3>
+            <p>Your approval range unlocks the inventory. Cars are sorted by EMI fit — the ones you can comfortably buy appear first.</p>
+            <div class="badge-row" id="fitBadges">
+              <span class="badge green">Run check to see your fits</span>
             </div>
+            <div id="postCheckNote" style="display:none;padding:12px 14px;border-radius:6px;background:var(--green-bg);border:1.5px solid #C0E5D5;color:var(--green);font-size:13px;font-weight:600;line-height:1.5;margin-bottom:12px;"></div>
             <button class="btn btn-primary" style="width:100%;height:48px;margin-top:auto;"
+              id="goToCarsBtn"
               onclick="document.getElementById('results').scrollIntoView({behavior:'smooth'})">
               Continue to matching cars →
             </button>
@@ -1259,8 +1241,6 @@
     const budgetEl   = document.getElementById('budget');
     const budgetText = document.getElementById('budgetText');
     const lockedBudget = document.getElementById('lockedBudget');
-    const lenderList = document.getElementById('lenderList');
-    const lockToken = document.getElementById('lockToken');
     const dealerGate = document.getElementById('dealerGate');
     const apiStatus  = document.getElementById('apiStatus');
     // In production, REPLACE this with your Render backend URL:
@@ -1296,14 +1276,6 @@
     });
 
     function numeric(v) { return Number(String(v||'').replace(/[^0-9]/g,'')) || 0; }
-
-    function formatLakhs(v) {
-      return 'Rs ' + (Number(v || 0) / 100000).toFixed(1).replace('.0', '') + 'L';
-    }
-
-    function formatRs(v) {
-      return 'Rs ' + Number(v || 0).toLocaleString('en-IN');
-    }
 
     function selectedSegment() {
       const t = document.querySelector('.segment.active')?.textContent.trim().toLowerCase() || '';
@@ -1347,11 +1319,19 @@
     }
 
     async function runEligibility() {
+      const approvalCard = document.getElementById('approvalCard');
+      const lenderList = document.getElementById('lenderList');
+      const verdictEl = document.getElementById('eligibilityVerdict');
+      const fitBadges = document.getElementById('fitBadges');
+      const postCheckNote = document.getElementById('postCheckNote');
+
+      approvalCard.innerHTML = '<span style="font-size:14px;font-weight:500;color:#555;">Calculating your eligibility…</span>';
+
       const payload = {
         userId: sessionId,
         monthlyIncome: numeric(document.getElementById('monthlyIncome').value),
         existingEmis: numeric(document.getElementById('existingEmis').value),
-        monthlyBudget: numeric(budgetEl.value),
+        monthlyBudget: numeric(budgetEl.value) || numeric(document.getElementById('monthlyIncome').value) * 0.3,
         age: numeric(document.getElementById('ageInput').value),
         jobStabilityMonths: numeric(document.getElementById('jobStability').value),
         bureauScore: numeric(document.getElementById('bureauScore').value),
@@ -1359,35 +1339,93 @@
         city: document.getElementById('cityInput').value || 'Delhi NCR',
         intent: { segment: selectedSegment(), visits: Number(localStorage.getItem('cd_visits')||1), budgetChanges: Number(localStorage.getItem('cd_budget_changes')||0) }
       };
+
       try {
         const aff = await api('/api/affordability', payload);
         const match = await api('/api/match', {...payload, affordability: aff});
-        const low = formatLakhs(aff.loanRange?.min || aff.worstCase);
-        const high = formatLakhs(aff.loanRange?.max || aff.bestCase || aff.maxLoan);
-        const approvalCard = document.querySelector('.approval-card');
-        const curve = [
-          { amount: aff.bestCase || aff.maxLoan, probability: aff.approvalProbability },
-          { amount: Math.round((aff.bestCase || aff.maxLoan) * 0.9), probability: Math.min(96, aff.approvalProbability + 10) },
-          { amount: Math.round((aff.bestCase || aff.maxLoan) * 0.8), probability: Math.min(98, aff.approvalProbability + 18) }
-        ];
-        lockedBudget.textContent = `Soft-check result: ${low} - ${high}. Approval probability ${aff.approvalProbability}% at requested budget. Confidence: ${aff.confidence}.`;
-        approvalCard.innerHTML = `Estimated range<span>${low} - ${high}</span>${aff.confidence} confidence before document verification<div class="probability-grid">${curve.map(row => `<div class="probability-pill">${formatLakhs(row.amount)}<br>${row.probability}%</div>`).join('')}</div>`;
-        lenderList.innerHTML = (aff.offers || []).slice(0, 4).map(offer => `<div class="lender-row"><span>${offer.lender}<br>${offer.interestRate}% for ${offer.tenureMonths} mo</span><strong>${formatLakhs(offer.approvedAmount)} | ${offer.approvalProbability}%</strong></div>`).join('');
-        lockToken.textContent = `Rate signal locked: ${aff.lockToken} | valid for ${aff.tokenValidHours} hours. Use this before dealer contact.`;
-        lockToken.classList.add('active');
-        applyMatches(match);
+
+        const minL = (aff.worstCase / 100000).toFixed(1).replace('.0','');
+        const maxL = (aff.bestCase / 100000).toFixed(1).replace('.0','');
+        const safeMin = aff.safeEmiRange.min.toLocaleString('en-IN');
+        const safeMax = aff.safeEmiRange.max.toLocaleString('en-IN');
+        const prob = aff.approvalProbability;
+        const conf = aff.confidence;
+        const confColor = conf === 'HIGH' ? 'var(--green)' : conf === 'MEDIUM' ? 'var(--amber)' : 'var(--red)';
+
+        // Update approval card with real data
+        const curve = aff.offers ? aff.offers.slice(0,3) : [];
+        approvalCard.innerHTML = `
+          Estimated loan range
+          <span>Rs ${minL}L – Rs ${maxL}L</span>
+          Safe EMI: ₹${safeMin}–₹${safeMax}/month · <span style="color:${confColor}">${conf} confidence</span>
+          <div class="probability-grid" style="margin-top:10px;">
+            ${curve.map(o => `<div class="probability-pill">${(o.approvedAmount/100000).toFixed(1)}L<br>${o.approvalProbability}%</div>`).join('')}
+          </div>`;
+
+        // Show lender breakdown
+        lenderList.innerHTML = (aff.offers || []).slice(0,3).map(o =>
+          `<div class="lender-row">
+            <span>${o.lender}<br><span style="color:var(--ink-50)">${o.interestRate}% · ${o.tenureMonths} mo</span></span>
+            <strong style="color:${o.decision==='LIKELY'?'var(--green)':'var(--amber)'}">₹${(o.approvedAmount/100000).toFixed(1)}L · ${o.approvalProbability}%</strong>
+          </div>`
+        ).join('');
+
+        // Verdict message
+        const budget = payload.monthlyBudget;
+        const canAfford = match.cars.filter(c => c.fit.status === 'FIT').length;
+        verdictEl.style.display = 'block';
+        verdictEl.style.background = canAfford > 0 ? 'var(--green-bg)' : '#FFF8F5';
+        verdictEl.style.border = `1.5px solid ${canAfford > 0 ? '#C0E5D5' : '#EDD8A4'}`;
+        verdictEl.style.color = canAfford > 0 ? 'var(--green)' : 'var(--amber)';
+        verdictEl.innerHTML = canAfford > 0
+          ? `✅ <strong>${canAfford} car${canAfford>1?'s':''} fit your budget.</strong> Scroll down to see them — your approval band is locked in.`
+          : `⚠️ <strong>Your budget of ₹${budget.toLocaleString('en-IN')}/month is below all current inventory.</strong> Cars start at ₹6,950/month. Consider a down payment to lower EMI.`;
+
+        // Update step 3 badges
+        const fitCars = match.cars.filter(c => c.fit.status === 'FIT');
+        const overCars = match.cars.filter(c => c.fit.status !== 'FIT');
+        fitBadges.innerHTML = fitCars.map(c => `<span class="badge green">${c.name.split(' ').slice(1).join(' ')} fits</span>`).join('')
+          + overCars.map(c => `<span class="badge amber">+₹${c.fit.extraEmi.toLocaleString('en-IN')}/mo for ${c.name.split(' ')[0]} ${c.name.split(' ')[1]}</span>`).join('');
+
+        postCheckNote.style.display = 'block';
+        postCheckNote.innerHTML = `Rate locked for 24 hrs · Token: <strong>${aff.lockToken}</strong><br>Go to cars below → pick your fit → Lock & Call Dealer.`;
+
+        // Update sidebar locked budget
+        lockedBudget.textContent = `Approved: ₹${minL}L–₹${maxL}L · EMI band ₹${safeMin}–₹${safeMax}/month`;
         lockedBudget.classList.add('active');
-        await logEvent({ eventType:'eligibility_check', safeEmiMin:aff.safeEmiRange.min, safeEmiMax:aff.safeEmiRange.max, approvalProbability: aff.approvalProbability, confidence: aff.confidence, lockToken: aff.lockToken, cta:'run_soft_check' });
-        document.getElementById('results').scrollIntoView({behavior:'smooth'});
-      } catch {
+
+        // Apply fit/over styling to car cards
+        applyMatches(match);
+
+        // Reveal "Lock & Call" CTAs on cards, hide "Check Eligibility" CTAs
+        document.querySelectorAll('.pre-check-actions').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.post-check-actions').forEach(el => el.style.display = 'flex');
+
+        await logEvent({ eventType:'eligibility_check', safeEmiMin:aff.safeEmiRange.min, safeEmiMax:aff.safeEmiRange.max, approvalProbability: prob, confidence: conf, lockToken: aff.lockToken, cta:'run_soft_check' });
+
+        // Scroll to results after short delay so user sees the result first
+        setTimeout(() => document.getElementById('results').scrollIntoView({behavior:'smooth'}), 1200);
+
+      } catch(err) {
+        approvalCard.innerHTML = `<span style="color:var(--amber);font-weight:600;">⚠️ Could not connect to eligibility engine. Using budget fallback.</span>`;
         lockBudget();
       }
     }
 
+    // Lock rate and call dealer
+    function lockAndCall(btn, carName) {
+      const token = document.getElementById('postCheckNote')?.textContent?.match(/CD-[A-Z0-9]+/)?.[0] || 'CD-XXXXXXXX';
+      btn.textContent = `✅ Rate Locked · Connecting dealer…`;
+      btn.disabled = true;
+      btn.style.background = 'var(--green)';
+      logEvent({ eventType:'dealer_gate', carName, lockToken: token, cta:'lock_and_call' });
+      setTimeout(() => {
+        btn.textContent = `📞 Dealer will call you within 2 hours`;
+      }, 1500);
+    }
+
     function lockBudget() {
       lockedBudget.textContent = 'Budget locked. Cars above this band are marked — click any card to check eligibility.';
-      lenderList.innerHTML = '';
-      lockToken.classList.remove('active');
       lockedBudget.classList.add('active');
       document.querySelectorAll('.car-card').forEach(c => c.classList.remove('over-budget'));
       const cards = document.querySelectorAll('.car-card');
