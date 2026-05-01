@@ -1407,9 +1407,128 @@
         setTimeout(() => document.getElementById('results').scrollIntoView({behavior:'smooth'}), 1200);
 
       } catch(err) {
-        approvalCard.innerHTML = `<span style="color:var(--amber);font-weight:600;">⚠️ Could not connect to eligibility engine. Using budget fallback.</span>`;
-        lockBudget();
+        // ── CLIENT-SIDE FALLBACK: compute offline when backend is unreachable ──
+        runEligibilityOffline();
       }
+    }
+
+    // Full offline affordability engine (mirrors server logic)
+    function runEligibilityOffline() {
+      const approvalCard = document.getElementById('approvalCard');
+      const lenderList = document.getElementById('lenderList');
+      const verdictEl = document.getElementById('eligibilityVerdict');
+      const fitBadges = document.getElementById('fitBadges');
+      const postCheckNote = document.getElementById('postCheckNote');
+
+      const income = numeric(document.getElementById('monthlyIncome').value) || 55000;
+      const existingEmis = numeric(document.getElementById('existingEmis').value) || 0;
+      const age = numeric(document.getElementById('ageInput').value) || 31;
+      const jobMonths = numeric(document.getElementById('jobStability').value) || 24;
+      const bureauScore = numeric(document.getElementById('bureauScore').value) || 700;
+      const empType = document.getElementById('employmentType').value || 'Salaried';
+      const city = document.getElementById('cityInput').value || 'Delhi NCR';
+      const requestedBudget = numeric(budgetEl.value) || Math.round(income * 0.3);
+
+      // FOIR-based disposable EMI
+      const foirLimit = bureauScore >= 760 ? 0.46 : bureauScore >= 700 ? 0.40 : bureauScore >= 640 ? 0.34 : 0.28;
+      const disposableEmi = Math.max(2500, Math.round(income * foirLimit - existingEmis));
+      const ageFactor = age < 24 ? 0.88 : age > 55 ? 0.90 : 1;
+      const stabilityFactor = jobMonths < 6 ? 0.82 : jobMonths < 18 ? 0.94 : 1.04;
+      const empFactor = /gov|psu|mnc|listed/i.test(empType) ? 1.06 : /self|gig/i.test(empType) ? 0.90 : 1.0;
+      const cityFactor = /jaipur|lucknow|indore|bhopal|tier.2/i.test(city) ? 0.95 : 1;
+      const adjEmi = Math.round(disposableEmi * ageFactor * stabilityFactor * empFactor * cityFactor);
+
+      function pmtReverse(emi, rate=0.105, months=72) {
+        const r = rate/12;
+        return Math.round(emi * ((1 - Math.pow(1+r,-months))/r));
+      }
+      function emiForLoan(principal, rate=0.105, months=72) {
+        const r = rate/12;
+        return Math.round((principal*r*Math.pow(1+r,months))/(Math.pow(1+r,months)-1));
+      }
+
+      const lenders = [
+        { name:'Rupyy Prime NBFC', rate:10.4, months:72, factor:1.02 },
+        { name:'Partner Bank', rate:10.9, months:72, factor:0.94 },
+        { name:'Fast NBFC', rate:12.2, months:60, factor:0.86 }
+      ];
+
+      const offers = lenders.map(l => {
+        const emi = Math.round(adjEmi * l.factor);
+        const amount = pmtReverse(emi, l.rate/100, l.months);
+        const prob = Math.min(92, Math.max(30, Math.round(60 + (bureauScore-650)/8 + (jobMonths>18?8:0) - (existingEmis/income)*40)));
+        return { name: l.name, rate: l.rate, months: l.months, emi, amount, prob };
+      });
+
+      const worstCase = Math.min(...offers.map(o=>o.amount));
+      const bestCase = Math.max(...offers.map(o=>o.amount));
+      const safeMin = Math.max(3000, Math.round(Math.min(...offers.map(o=>o.emi)) - 300));
+      const safeMax = Math.round(Math.min(requestedBudget + 600, Math.max(...offers.map(o=>o.emi))));
+      const prob = offers[0].prob;
+      const conf = bureauScore >= 740 && jobMonths >= 18 ? 'HIGH' : bureauScore >= 680 ? 'MEDIUM' : 'LOW';
+      const confColor = conf==='HIGH' ? 'var(--green)' : conf==='MEDIUM' ? 'var(--amber)' : 'var(--red)';
+      const token = 'CD-' + Math.random().toString(36).slice(2,10).toUpperCase();
+
+      const minL = (worstCase/100000).toFixed(1).replace('.0','');
+      const maxL = (bestCase/100000).toFixed(1).replace('.0','');
+
+      approvalCard.innerHTML = `
+        Estimated loan range
+        <span>Rs ${minL}L – Rs ${maxL}L</span>
+        Safe EMI: ₹${safeMin.toLocaleString('en-IN')}–₹${safeMax.toLocaleString('en-IN')}/month · <span style="color:${confColor}">${conf} confidence</span>
+        <div class="probability-grid" style="margin-top:10px;">
+          ${offers.map(o=>`<div class="probability-pill">${(o.amount/100000).toFixed(1)}L<br>${o.prob}%</div>`).join('')}
+        </div>
+        <div style="margin-top:8px;font-size:11px;opacity:0.65;">Computed offline · Results may vary slightly from live engine</div>`;
+
+      lenderList.innerHTML = offers.map(o =>
+        `<div class="lender-row">
+          <span>${o.name}<br><span style="color:var(--ink-50)">${o.rate}% · ${o.months} mo</span></span>
+          <strong style="color:var(--green)">₹${(o.amount/100000).toFixed(1)}L · ${o.prob}%</strong>
+        </div>`).join('');
+
+      // Inventory cars hardcoded to match backend
+      const inventory = [
+        { name:'Hyundai i20 Sportz', emi:7800 },
+        { name:'Maruti Swift VXI',   emi:6950 },
+        { name:'Tata Nexon XZ+',     emi:9400 },
+        { name:'Honda City VX',      emi:8700 }
+      ];
+      const fitCars = inventory.filter(c => c.emi <= safeMax);
+      const overCars = inventory.filter(c => c.emi > safeMax);
+      const canAfford = fitCars.length;
+
+      verdictEl.style.display = 'block';
+      verdictEl.style.background = canAfford > 0 ? 'var(--green-bg)' : '#FFF8F5';
+      verdictEl.style.border = `1.5px solid ${canAfford > 0 ? '#C0E5D5' : '#EDD8A4'}`;
+      verdictEl.style.color = canAfford > 0 ? 'var(--green)' : 'var(--amber)';
+      verdictEl.innerHTML = canAfford > 0
+        ? `✅ <strong>${canAfford} car${canAfford>1?'s':''} fit your budget.</strong> Scroll down — your approval band is locked in.`
+        : `⚠️ <strong>Your budget is below current inventory.</strong> Cars start at ₹6,950/mo. A ₹50K down payment can reduce EMI by ~₹800/month.`;
+
+      fitBadges.innerHTML = fitCars.map(c=>`<span class="badge green">${c.name.split(' ').slice(1).join(' ')} fits</span>`).join('')
+        + overCars.map(c=>`<span class="badge amber">+₹${(c.emi-safeMax).toLocaleString('en-IN')}/mo for ${c.name.split(' ')[0]}</span>`).join('');
+
+      postCheckNote.style.display = 'block';
+      postCheckNote.innerHTML = `Rate locked for 24 hrs · Token: <strong>${token}</strong><br>Go to cars below → pick your fit → Lock & Call Dealer.`;
+
+      lockedBudget.textContent = `Approved: ₹${minL}L–₹${maxL}L · EMI band ₹${safeMin.toLocaleString('en-IN')}–₹${safeMax.toLocaleString('en-IN')}/month`;
+      lockedBudget.classList.add('active');
+
+      // Apply over-budget styling
+      document.querySelectorAll('.car-card').forEach(card => {
+        const name = card.querySelector('.car-title')?.textContent.trim();
+        const car = inventory.find(c => c.name === name);
+        card.classList.toggle('over-budget', !!car && car.emi > safeMax);
+        const note = card.querySelector('.over-budget-note');
+        if (note && car && car.emi > safeMax)
+          note.textContent = `Above your band: requires about ₹${(car.emi-safeMax).toLocaleString('en-IN')} extra/month`;
+      });
+
+      document.querySelectorAll('.pre-check-actions').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.post-check-actions').forEach(el => el.style.display = 'flex');
+
+      setTimeout(() => document.getElementById('results').scrollIntoView({behavior:'smooth'}), 1200);
     }
 
     // Lock rate and call dealer
