@@ -611,6 +611,7 @@
     /* ─── LOAN SECTION ─── */
     .loan-grid, .swap-grid {
       display: grid; grid-template-columns: repeat(3,1fr); gap: 18px;
+      align-items: start; /* boxes only as tall as their content */
     }
 
     .loan-box, .swap-box {
@@ -645,14 +646,59 @@
     .approval-card {
       border: 1.5px solid #B8E0CE; background: var(--green-bg);
       color: var(--green); border-radius: var(--r-sm);
-      padding: 18px; font-weight: 700; margin-top: 8px;
-      font-size: 14px; line-height: 1.5;
+      padding: 18px; font-weight: 600; margin-top: 8px;
+      font-size: 13px; line-height: 1.55;
     }
+    /* The big loan range number */
     .approval-card span {
       display: block; font-family: 'Playfair Display', serif;
-      font-size: 32px; font-weight: 900;
-      letter-spacing: -0.04em; margin: 4px 0;
+      font-size: clamp(22px, 2.8vw, 30px); font-weight: 900;
+      letter-spacing: -0.03em; margin: 6px 0 4px;
+      line-height: 1.1; word-break: break-word;
     }
+    /* confidence badge — inline, never giant */
+    .conf-badge {
+      display: inline-block;
+      font-size: 12px; font-weight: 700;
+      padding: 3px 10px; border-radius: 100px;
+      background: rgba(0,0,0,0.06);
+      margin-bottom: 10px;
+    }
+    /* lender probability pills — 3 per row */
+    .probability-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 6px; margin-top: 10px;
+    }
+    .probability-pill {
+      border: 1px solid rgba(0,107,77,0.25);
+      border-radius: var(--r-sm);
+      background: rgba(255,255,255,0.55);
+      padding: 8px 6px;
+      text-align: center;
+      font-size: 12px; font-weight: 700;
+      line-height: 1.4; color: var(--green);
+    }
+    .probability-pill .pill-amount {
+      display: block; font-size: 13px; font-weight: 800;
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.02em;
+    }
+    .probability-pill .pill-prob {
+      display: block; font-size: 11px; opacity: 0.75;
+    }
+    /* lender rows */
+    .lender-list { display: grid; gap: 7px; margin-top: 12px; }
+    .lender-row {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 8px; padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm); background: white;
+      font-size: 12px; color: var(--ink-80);
+    }
+    .lender-row .lender-info { display: flex; flex-direction: column; gap: 1px; }
+    .lender-row .lender-name { font-weight: 600; font-size: 12px; }
+    .lender-row .lender-meta { font-size: 11px; color: var(--ink-50); }
+    .lender-row .lender-amount { font-weight: 700; font-size: 13px; white-space: nowrap; }
 
     /* ─── SWAP SECTION ─── */
     .swap-math { margin-top: 14px; }
@@ -1148,7 +1194,7 @@
               <span class="badge green">Run check to see your fits</span>
             </div>
             <div id="postCheckNote" style="display:none;padding:12px 14px;border-radius:6px;background:var(--green-bg);border:1.5px solid #C0E5D5;color:var(--green);font-size:13px;font-weight:600;line-height:1.5;margin-bottom:12px;"></div>
-            <button class="btn btn-primary" style="width:100%;height:48px;margin-top:auto;"
+            <button class="btn btn-primary" style="width:100%;height:48px;margin-top:16px;"
               id="goToCarsBtn"
               onclick="document.getElementById('results').scrollIntoView({behavior:'smooth'})">
               Continue to matching cars →
@@ -1357,16 +1403,25 @@
         approvalCard.innerHTML = `
           Estimated loan range
           <span>Rs ${minL}L – Rs ${maxL}L</span>
-          Safe EMI: ₹${safeMin}–₹${safeMax}/month · <span style="color:${confColor}">${conf} confidence</span>
-          <div class="probability-grid" style="margin-top:10px;">
-            ${curve.map(o => `<div class="probability-pill">${(o.approvedAmount/100000).toFixed(1)}L<br>${o.approvalProbability}%</div>`).join('')}
+          <span class="conf-badge" style="color:${confColor};background:${conf==='HIGH'?'rgba(0,107,77,0.10)':conf==='MEDIUM'?'rgba(122,77,8,0.10)':'rgba(200,49,26,0.10)'}">
+            ${conf} confidence
+          </span>
+          Safe EMI band: ₹${safeMin}–₹${safeMax}/month
+          <div class="probability-grid">
+            ${curve.map(o => `<div class="probability-pill">
+              <span class="pill-amount">₹${(o.approvedAmount/100000).toFixed(1)}L</span>
+              <span class="pill-prob">${o.approvalProbability}% approval</span>
+            </div>`).join('')}
           </div>`;
 
         // Show lender breakdown
         lenderList.innerHTML = (aff.offers || []).slice(0,3).map(o =>
           `<div class="lender-row">
-            <span>${o.lender}<br><span style="color:var(--ink-50)">${o.interestRate}% · ${o.tenureMonths} mo</span></span>
-            <strong style="color:${o.decision==='LIKELY'?'var(--green)':'var(--amber)'}">₹${(o.approvedAmount/100000).toFixed(1)}L · ${o.approvalProbability}%</strong>
+            <div class="lender-info">
+              <span class="lender-name">${o.lender}</span>
+              <span class="lender-meta">${o.interestRate}% · ${o.tenureMonths} months</span>
+            </div>
+            <span class="lender-amount" style="color:${o.decision==='LIKELY'?'var(--green)':'var(--amber)'}">₹${(o.approvedAmount/100000).toFixed(1)}L · ${o.approvalProbability}%</span>
           </div>`
         ).join('');
 
@@ -1403,8 +1458,7 @@
 
         await logEvent({ eventType:'eligibility_check', safeEmiMin:aff.safeEmiRange.min, safeEmiMax:aff.safeEmiRange.max, approvalProbability: prob, confidence: conf, lockToken: aff.lockToken, cta:'run_soft_check' });
 
-        // Scroll to results after short delay so user sees the result first
-        setTimeout(() => document.getElementById('results').scrollIntoView({behavior:'smooth'}), 1200);
+        // Do NOT auto-scroll — user reads results first, then clicks "Continue to matching cars"
 
       } catch(err) {
         // ── CLIENT-SIDE FALLBACK: compute offline when backend is unreachable ──
@@ -1475,16 +1529,25 @@
       approvalCard.innerHTML = `
         Estimated loan range
         <span>Rs ${minL}L – Rs ${maxL}L</span>
-        Safe EMI: ₹${safeMin.toLocaleString('en-IN')}–₹${safeMax.toLocaleString('en-IN')}/month · <span style="color:${confColor}">${conf} confidence</span>
-        <div class="probability-grid" style="margin-top:10px;">
-          ${offers.map(o=>`<div class="probability-pill">${(o.amount/100000).toFixed(1)}L<br>${o.prob}%</div>`).join('')}
+        <span class="conf-badge" style="color:${confColor};background:${conf==='HIGH'?'rgba(0,107,77,0.10)':conf==='MEDIUM'?'rgba(122,77,8,0.10)':'rgba(200,49,26,0.10)'}">
+          ${conf} confidence
+        </span>
+        Safe EMI band: ₹${safeMin.toLocaleString('en-IN')}–₹${safeMax.toLocaleString('en-IN')}/month
+        <div class="probability-grid">
+          ${offers.map(o=>`<div class="probability-pill">
+            <span class="pill-amount">₹${(o.amount/100000).toFixed(1)}L</span>
+            <span class="pill-prob">${o.prob}% approval</span>
+          </div>`).join('')}
         </div>
-        <div style="margin-top:8px;font-size:11px;opacity:0.65;">Computed offline · Results may vary slightly from live engine</div>`;
+        <div style="margin-top:8px;font-size:11px;opacity:0.6;font-weight:400;">Offline estimate · may vary from live engine</div>`;
 
       lenderList.innerHTML = offers.map(o =>
         `<div class="lender-row">
-          <span>${o.name}<br><span style="color:var(--ink-50)">${o.rate}% · ${o.months} mo</span></span>
-          <strong style="color:var(--green)">₹${(o.amount/100000).toFixed(1)}L · ${o.prob}%</strong>
+          <div class="lender-info">
+            <span class="lender-name">${o.name}</span>
+            <span class="lender-meta">${o.rate}% · ${o.months} months</span>
+          </div>
+          <span class="lender-amount" style="color:var(--green)">₹${(o.amount/100000).toFixed(1)}L · ${o.prob}%</span>
         </div>`).join('');
 
       // Inventory cars hardcoded to match backend
@@ -1528,7 +1591,7 @@
       document.querySelectorAll('.pre-check-actions').forEach(el => el.style.display = 'none');
       document.querySelectorAll('.post-check-actions').forEach(el => el.style.display = 'flex');
 
-      setTimeout(() => document.getElementById('results').scrollIntoView({behavior:'smooth'}), 1200);
+      // User reads results first, then clicks "Continue to matching cars" button
     }
 
     // Lock rate and call dealer
