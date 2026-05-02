@@ -611,6 +611,7 @@
     /* ─── LOAN SECTION ─── */
     .loan-grid, .swap-grid {
       display: grid; grid-template-columns: repeat(3,1fr); gap: 18px;
+      align-items: start; /* boxes only as tall as their content */
     }
 
     .loan-box, .swap-box {
@@ -645,63 +646,59 @@
     .approval-card {
       border: 1.5px solid #B8E0CE; background: var(--green-bg);
       color: var(--green); border-radius: var(--r-sm);
-      padding: 18px; font-weight: 700; margin-top: 8px;
-      font-size: 14px; line-height: 1.5;
+      padding: 18px; font-weight: 600; margin-top: 8px;
+      font-size: 13px; line-height: 1.55;
     }
+    /* The big loan range number */
     .approval-card span {
       display: block; font-family: 'Playfair Display', serif;
-      font-size: 32px; font-weight: 900;
-      letter-spacing: -0.04em; margin: 4px 0;
+      font-size: clamp(22px, 2.8vw, 30px); font-weight: 900;
+      letter-spacing: -0.03em; margin: 6px 0 4px;
+      line-height: 1.1; word-break: break-word;
     }
-
+    /* confidence badge — inline, never giant */
+    .conf-badge {
+      display: inline-block;
+      font-size: 12px; font-weight: 700;
+      padding: 3px 10px; border-radius: 100px;
+      background: rgba(0,0,0,0.06);
+      margin-bottom: 10px;
+    }
+    /* lender probability pills — 3 per row */
     .probability-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 8px; margin-top: 12px;
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 6px; margin-top: 10px;
     }
-
     .probability-pill {
-      border: 1px solid #C0E5D5;
+      border: 1px solid rgba(0,107,77,0.25);
       border-radius: var(--r-sm);
-      background: rgba(255,255,255,0.62);
-      padding: 10px;
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.35;
+      background: rgba(255,255,255,0.55);
+      padding: 8px 6px;
+      text-align: center;
+      font-size: 12px; font-weight: 700;
+      line-height: 1.4; color: var(--green);
     }
-
-    .lender-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 14px;
+    .probability-pill .pill-amount {
+      display: block; font-size: 13px; font-weight: 800;
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.02em;
     }
-
+    .probability-pill .pill-prob {
+      display: block; font-size: 11px; opacity: 0.75;
+    }
+    /* lender rows */
+    .lender-list { display: grid; gap: 7px; margin-top: 12px; }
     .lender-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 12px;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 8px; padding: 9px 12px;
       border: 1px solid var(--line);
-      border-radius: var(--r-sm);
-      background: white;
-      font-size: 12px;
-      color: var(--ink-80);
+      border-radius: var(--r-sm); background: white;
+      font-size: 12px; color: var(--ink-80);
     }
-
-    .lock-token {
-      display: none;
-      margin-top: 14px;
-      padding: 12px 14px;
-      border: 1.5px solid #FFD7CA;
-      border-radius: var(--r-sm);
-      background: #FFF7F5;
-      color: #7A2B10;
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
-    .lock-token.active { display: block; }
+    .lender-row .lender-info { display: flex; flex-direction: column; gap: 1px; }
+    .lender-row .lender-name { font-weight: 600; font-size: 12px; }
+    .lender-row .lender-meta { font-size: 11px; color: var(--ink-50); }
+    .lender-row .lender-amount { font-weight: 700; font-size: 13px; white-space: nowrap; }
 
     /* ─── SWAP SECTION ─── */
     .swap-math { margin-top: 14px; }
@@ -943,9 +940,16 @@
                   <div class="signal" role="listitem">Charge protection</div>
                   <div class="signal" role="listitem">Pre-approved lead</div>
                 </div>
-                <div class="card-actions">
+                <div class="card-actions pre-check-actions">
                   <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
                   <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+                <div class="card-actions post-check-actions" style="display:none;flex-direction:column;gap:8px;">
+                  <button class="btn btn-primary" style="width:100%;" onclick="lockAndCall(this,'Hyundai i20 Sportz')">🔒 Lock this rate &amp; Call Dealer</button>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                    <button class="btn btn-ghost" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Re-check</button>
+                  </div>
                 </div>
               </div>
             </article>
@@ -973,9 +977,16 @@
                   <div class="signal" role="listitem">48 hr handover</div>
                   <div class="signal" role="listitem">Pack ₹4,999/yr</div>
                 </div>
-                <div class="card-actions">
+                <div class="card-actions pre-check-actions">
                   <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
                   <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+                <div class="card-actions post-check-actions" style="display:none;flex-direction:column;gap:8px;">
+                  <button class="btn btn-primary" style="width:100%;" onclick="lockAndCall(this,'Maruti Swift VXI')">🔒 Lock this rate &amp; Call Dealer</button>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                    <button class="btn btn-ghost" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Re-check</button>
+                  </div>
                 </div>
               </div>
             </article>
@@ -1003,9 +1014,16 @@
                   <div class="signal" role="listitem">No pending loan</div>
                   <div class="signal" role="listitem">Warranty add-on</div>
                 </div>
-                <div class="card-actions">
+                <div class="card-actions pre-check-actions">
                   <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
                   <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+                <div class="card-actions post-check-actions" style="display:none;flex-direction:column;gap:8px;">
+                  <button class="btn btn-primary" style="width:100%;" onclick="lockAndCall(this,'Tata Nexon XZ+')">🔒 Lock this rate &amp; Call Dealer</button>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                    <button class="btn btn-ghost" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Re-check</button>
+                  </div>
                 </div>
               </div>
             </article>
@@ -1033,9 +1051,16 @@
                   <div class="signal" role="listitem">Dealer masked</div>
                   <div class="signal" role="listitem">12 month cover</div>
                 </div>
-                <div class="card-actions">
+                <div class="card-actions pre-check-actions">
                   <button class="btn btn-primary" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
                   <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                </div>
+                <div class="card-actions post-check-actions" style="display:none;flex-direction:column;gap:8px;">
+                  <button class="btn btn-primary" style="width:100%;" onclick="lockAndCall(this,'Honda City VX')">🔒 Lock this rate &amp; Call Dealer</button>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button class="btn btn-outline" onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})">Details</button>
+                    <button class="btn btn-ghost" onclick="document.getElementById('loan').scrollIntoView({behavior:'smooth'})">Re-check</button>
+                  </div>
                 </div>
               </div>
             </article>
@@ -1089,7 +1114,7 @@
               <div class="cost-row"><span>Processing fee</span><strong>₹3,500</strong></div>
               <div class="cost-row total"><span>Total outflow</span><strong>₹5,43,500</strong></div>
             </div>
-            <div class="preapproved">Estimated lender range appears after soft-check. Dealer contact stays gated until the lock token is created.</div>
+            <div class="preapproved">Estimated loan approved: ₹4,50,000</div>
             <div class="insurance">Included by default: Insurance + warranty pack at ₹4,999/year. You can remove it, but it is not recommended.</div>
             <div class="bundle-card">Default pack: insurance quote, warranty cover, RC transfer status, claim support handoff.</div>
             <div class="secondary-actions">
@@ -1113,61 +1138,64 @@
         </div>
 
         <div class="loan-grid">
+          <!-- Step 1: Inputs with labels -->
           <div class="loan-box">
             <div class="step-num">1</div>
-            <h3>Soft eligibility</h3>
-            <p>Soft-check signals lenders actually use. No hard bureau pull.</p>
-            <input class="mini-field" id="monthlyIncome" value="55000" aria-label="Monthly income" placeholder="Monthly income (₹)">
-            <select class="mini-field" id="employmentType" aria-label="Employment type">
-              <option>Salaried</option>
-              <option>MNC / listed company</option>
-              <option>Government / PSU</option>
-              <option>Self-employed</option>
+            <h3>Your details</h3>
+            <p>Six quick inputs. No CIBIL impact. No hard bureau pull.</p>
+            <label class="field-label" for="monthlyIncome" style="margin-top:2px;">Monthly Income (₹)</label>
+            <input class="mini-field" id="monthlyIncome" value="55000" placeholder="e.g. 55000">
+            <label class="field-label" for="employmentType">Employment Type</label>
+            <select class="mini-field" id="employmentType">
+              <option value="Salaried">Salaried</option>
+              <option value="MNC / listed company">MNC / Listed Company</option>
+              <option value="Government / PSU">Government / PSU</option>
+              <option value="Self-employed">Self-employed / Business</option>
             </select>
-            <input class="mini-field" id="existingEmis" value="0" aria-label="Existing monthly EMI" placeholder="Existing EMI (₹0 if none)">
-            <input class="mini-field" id="ageInput" value="31" aria-label="Age" placeholder="Age">
-            <input class="mini-field" id="jobStability" value="24" aria-label="Job stability in months" placeholder="Job stability (months)">
-            <select class="mini-field" id="bureauScore" aria-label="Bureau score estimate">
-              <option value="700">Bureau proxy: 680-720</option>
-              <option value="780">Bureau proxy: 750+</option>
-              <option value="630">Bureau proxy: 600-660</option>
-              <option value="580">Thin / no bureau</option>
+            <label class="field-label" for="existingEmis">Existing EMIs per month (₹)</label>
+            <input class="mini-field" id="existingEmis" value="0" placeholder="₹0 if none">
+            <label class="field-label" for="ageInput">Your Age</label>
+            <input class="mini-field" id="ageInput" value="31" placeholder="e.g. 28">
+            <label class="field-label" for="jobStability">Job Stability (months in current job)</label>
+            <input class="mini-field" id="jobStability" value="24" placeholder="e.g. 24">
+            <label class="field-label" for="bureauScore">CIBIL / Credit Score (approx.)</label>
+            <select class="mini-field" id="bureauScore">
+              <option value="700">680–720 (Good)</option>
+              <option value="780">750+ (Excellent)</option>
+              <option value="630">600–660 (Fair)</option>
+              <option value="580">No bureau / new to credit</option>
             </select>
-            <input class="mini-field" id="cityInput" value="Delhi NCR" aria-label="City" placeholder="Your city">
+            <label class="field-label" for="cityInput">Your City</label>
+            <input class="mini-field" id="cityInput" value="Delhi NCR" placeholder="e.g. Mumbai, Delhi NCR">
           </div>
 
+          <!-- Step 2: Approval result -->
           <div class="loan-box">
             <div class="step-num">2</div>
-            <h3>Approval range</h3>
-            <p>Estimated range, probability, confidence, and lender variation.</p>
-            <div class="approval-card">
-              Estimated range
-              <span>Rs 3.8L - Rs 4.6L</span>
-              Medium confidence before document verification
-              <div class="probability-grid">
-                <div class="probability-pill">Rs 4.5L<br>62%</div>
-                <div class="probability-pill">Rs 4.0L<br>85%</div>
-                <div class="probability-pill">Rs 3.8L<br>90%</div>
-              </div>
+            <h3>Your approval range</h3>
+            <p>Your personalised loan estimate and EMI band — calculated from your details.</p>
+            <div class="approval-card" id="approvalCard">
+              Fill your details and click Run soft-check to see your estimated range.
             </div>
             <div class="lender-list" id="lenderList" aria-live="polite"></div>
-            <div class="lock-token" id="lockToken"></div>
+            <div id="eligibilityVerdict" style="display:none;margin-top:12px;padding:14px;border-radius:8px;font-size:14px;font-weight:700;line-height:1.5;"></div>
             <button class="btn btn-primary" style="width:100%;height:48px;margin-top:14px;"
               onclick="runEligibility()">
-              Run soft-check
+              Run soft-check →
             </button>
           </div>
 
+          <!-- Step 3: Go to matching cars (no lock token box here) -->
           <div class="loan-box">
             <div class="step-num">3</div>
-            <h3>Lock and route</h3>
-            <p>Lock the rate signal for 24 hours, capture the buyer, then route to inventory before dealer contact.</p>
-            <div class="badge-row">
-              <span class="badge green">Soft check only</span>
-              <span class="badge blue">Token valid 24 hrs</span>
-              <span class="badge amber">Dealer gated</span>
+            <h3>See matching cars</h3>
+            <p>Your approval range unlocks the inventory. Cars are sorted by EMI fit — the ones you can comfortably buy appear first.</p>
+            <div class="badge-row" id="fitBadges">
+              <span class="badge green">Run check to see your fits</span>
             </div>
-            <button class="btn btn-primary" style="width:100%;height:48px;margin-top:auto;"
+            <div id="postCheckNote" style="display:none;padding:12px 14px;border-radius:6px;background:var(--green-bg);border:1.5px solid #C0E5D5;color:var(--green);font-size:13px;font-weight:600;line-height:1.5;margin-bottom:12px;"></div>
+            <button class="btn btn-primary" style="width:100%;height:48px;margin-top:16px;"
+              id="goToCarsBtn"
               onclick="document.getElementById('results').scrollIntoView({behavior:'smooth'})">
               Continue to matching cars →
             </button>
@@ -1183,47 +1211,262 @@
           <div>
             <div class="section-label">Car Upgrade</div>
             <h2>Upgrade without<br>double EMI.</h2>
-            <p class="section-sub">Selling, buying, loan top-up, RC transfer, and insurance are coordinated as one handover.</p>
+            <p class="section-sub">Enter your current car details. We calculate your trade-in value, sell timeline, and exact net EMI — before you talk to anyone.</p>
           </div>
         </div>
 
-        <div class="swap-grid">
-          <div class="swap-box">
-            <div class="step-num">1</div>
-            <h3>Sell your car</h3>
-            <p>Instant price range with a market benchmark — not a blind callback.</p>
-            <div class="approval-card">
-              Swift VXI estimate
-              <span>₹2.9L–₹3.2L</span>
-              Dealer bids open today
-            </div>
-          </div>
+        <!-- UPGRADE STEP 1: Car Details Form -->
+        <div id="upg-step1">
+          <div class="swap-grid" style="grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
 
-          <div class="swap-box">
-            <div class="step-num">2</div>
-            <h3>Coordinated handover</h3>
-            <p>Old car pick-up, RC transfer, insurance activation, and loan top-up — all on delivery day.</p>
-            <div class="badge-row">
-              <span class="badge green">Old car pickup</span>
-              <span class="badge green">RC transfer</span>
-              <span class="badge green">Insurance live</span>
-              <span class="badge blue">Loan top-up</span>
-              <span class="badge red">No double EMI</span>
-            </div>
-          </div>
+            <!-- Left: Car details dropdown group -->
+            <div class="swap-box">
+              <div class="step-num">1</div>
+              <h3>Your current car</h3>
+              <p>Fill in your car details for an instant market estimate.</p>
 
-          <div class="swap-box">
-            <div class="step-num">3</div>
-            <h3>Net EMI</h3>
-            <p>The decision is framed as incremental monthly affordability — not total price.</p>
-            <div class="swap-math">
-              <div class="math-row"><span>Sell</span><span>₹3L</span></div>
-              <div class="math-row"><span>Buy</span><span>₹6L</span></div>
-              <div class="math-row"><span>Loan needed</span><span>₹3L</span></div>
-              <div class="math-row"><span>Net EMI</span><span>₹5,200/mo</span></div>
+              <label class="field-label" for="upg-make">Car Brand</label>
+              <select class="mini-field" id="upg-make">
+                <option value="">Select brand</option>
+                <option value="maruti">Maruti Suzuki</option>
+                <option value="hyundai">Hyundai</option>
+                <option value="tata">Tata</option>
+                <option value="honda">Honda</option>
+                <option value="toyota">Toyota</option>
+                <option value="mahindra">Mahindra</option>
+                <option value="kia">Kia</option>
+                <option value="volkswagen">Volkswagen</option>
+              </select>
+
+              <label class="field-label" for="upg-model">Model Name</label>
+              <input class="mini-field" id="upg-model" placeholder="e.g. Swift VXI, i20 Sportz, Nexon XZ">
+
+              <label class="field-label" for="upg-year">Year of Purchase</label>
+              <select class="mini-field" id="upg-year">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022" selected>2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+              </select>
+
+              <label class="field-label" for="upg-km">Kilometres Driven</label>
+              <select class="mini-field" id="upg-km">
+                <option value="10000">Under 20,000 km</option>
+                <option value="30000" selected>20,000 – 40,000 km</option>
+                <option value="50000">40,000 – 60,000 km</option>
+                <option value="70000">60,000 – 80,000 km</option>
+                <option value="90000">80,000+ km</option>
+              </select>
+
+              <label class="field-label" for="upg-condition">Car Condition</label>
+              <select class="mini-field" id="upg-condition">
+                <option value="excellent">Excellent — no dents or scratches</option>
+                <option value="good" selected>Good — minor wear only</option>
+                <option value="average">Average — visible damage</option>
+                <option value="poor">Poor — major repairs needed</option>
+              </select>
+            </div>
+
+            <!-- Right: Loan status -->
+            <div class="swap-box">
+              <div class="step-num">2</div>
+              <h3>Existing loan details</h3>
+              <p>If you have a loan on your current car, we deduct it from the trade-in value to show you the real net amount.</p>
+
+              <label class="field-label">Loan Status</label>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+                <button class="segment active" id="upg-loan-no" onclick="setUpgLoan('no')">No loan</button>
+                <button class="segment" id="upg-loan-yes" onclick="setUpgLoan('yes')">Loan active</button>
+                <button class="segment" id="upg-loan-closed" onclick="setUpgLoan('closed')">Fully paid</button>
+              </div>
+
+              <div id="upg-loan-fields" style="display:none;">
+                <label class="field-label" for="upg-outstanding">Outstanding Loan Amount (₹)</label>
+                <input class="mini-field" id="upg-outstanding" placeholder="e.g. 180000" value="180000">
+                <label class="field-label" for="upg-current-emi">Current Monthly EMI (₹)</label>
+                <input class="mini-field" id="upg-current-emi" placeholder="e.g. 8500" value="8500">
+              </div>
+
+              <label class="field-label" style="margin-top:8px;" for="upg-city">City</label>
+              <select class="mini-field" id="upg-city">
+                <option>Jaipur</option><option>Delhi NCR</option><option>Mumbai</option>
+                <option>Bengaluru</option><option>Hyderabad</option><option>Pune</option><option>Chennai</option>
+              </select>
+
+              <div class="loan-note" style="margin-top:16px;">
+                We use this to calculate zero-overlap EMI — you won't pay both EMIs at the same time.
+              </div>
+
+              <button class="btn btn-primary" style="width:100%;height:52px;margin-top:8px;font-size:15px;" onclick="runUpgradeValuation()">
+                Get my car's value →
+              </button>
             </div>
           </div>
         </div>
+
+        <!-- UPGRADE STEP 2: Valuation + Actions -->
+        <div id="upg-step2" style="display:none;">
+          <div class="swap-grid" style="grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:start;">
+
+            <!-- Valuation card -->
+            <div class="swap-box">
+              <div class="step-num">1</div>
+              <h3>Your car's estimated value</h3>
+              <p id="upg-car-summary-text" style="color:var(--ink-50);font-size:13px;margin-bottom:10px;">—</p>
+              <div class="approval-card" id="upg-valuation-card">
+                <span id="upg-price-range">Calculating…</span>
+                <div id="upg-demand-badge" style="margin-top:6px;"></div>
+              </div>
+              <div style="margin-top:12px;padding:12px 14px;background:var(--surface);border-radius:var(--r-sm);border:1px solid var(--line);">
+                <div style="font-size:12px;color:var(--ink-50);margin-bottom:4px;">Expected sell time</div>
+                <div style="font-size:18px;font-weight:700;color:var(--ink);" id="upg-sell-days">—</div>
+                <div style="font-size:11px;color:var(--ink-50);margin-top:2px;">Based on similar cars in your city</div>
+              </div>
+              <!-- Timeline bar -->
+              <div style="margin-top:14px;">
+                <div style="font-size:11px;color:var(--ink-50);margin-bottom:5px;">Old car pickup timeline</div>
+                <div style="display:flex;align-items:center;gap:0;height:6px;">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--red);flex-shrink:0;"></div>
+                  <div style="flex:1;height:4px;background:var(--red);border-radius:2px;"></div>
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--red);flex-shrink:0;"></div>
+                  <div style="flex:1;height:4px;background:linear-gradient(to right,var(--red) 60%,var(--line) 60%);border-radius:2px;"></div>
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--line);flex-shrink:0;"></div>
+                  <div style="flex:1;height:4px;background:var(--line);border-radius:2px;"></div>
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--line);flex-shrink:0;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--ink-50);margin-top:4px;">
+                  <span>Today</span><span>Bid confirmed</span><span>RC transfer</span><span>Money credited</span>
+                </div>
+              </div>
+              <button class="btn btn-ghost" style="width:100%;margin-top:16px;height:40px;font-size:13px;" onclick="resetUpgrade()">← Change details</button>
+            </div>
+
+            <!-- Action choice -->
+            <div class="swap-box">
+              <div class="step-num">2</div>
+              <h3>What do you want to do?</h3>
+              <p>Pick an action. Dealer call is for price negotiation only. Upgrade shows you new car options and net EMI.</p>
+              <div style="display:grid;gap:10px;margin-bottom:16px;">
+                <div id="upg-action-dealer" onclick="selectUpgAction('dealer')"
+                  style="border:1.5px solid var(--line);border-radius:var(--r);padding:16px;cursor:pointer;transition:all 0.18s;">
+                  <div style="font-size:22px;margin-bottom:4px;">📞</div>
+                  <div style="font-weight:700;font-size:15px;">Call a dealer</div>
+                  <div style="font-size:12px;color:var(--ink-50);margin-top:3px;">Get exact quotes, negotiate the final price directly</div>
+                </div>
+                <div id="upg-action-upgrade" onclick="selectUpgAction('upgrade')"
+                  style="border:1.5px solid var(--line);border-radius:var(--r);padding:16px;cursor:pointer;transition:all 0.18s;">
+                  <div style="font-size:22px;margin-bottom:4px;">🚗</div>
+                  <div style="font-weight:700;font-size:15px;">Upgrade to new car</div>
+                  <div style="font-size:12px;color:var(--ink-50);margin-top:3px;">See new car options with your net EMI calculated</div>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="width:100%;height:48px;" id="upg-action-btn" onclick="doUpgradeAction()">Select an option above</button>
+            </div>
+
+            <!-- Net trade-in summary -->
+            <div class="swap-box" id="upg-tradein-summary">
+              <div class="step-num">3</div>
+              <h3>Your trade-in snapshot</h3>
+              <p>This is what goes toward your new car — after clearing your existing loan.</p>
+              <div class="swap-math">
+                <div class="math-row"><span>Est. car value</span><span id="sum-car-value">—</span></div>
+                <div class="math-row"><span>Loan outstanding</span><span id="sum-loan">₹0</span></div>
+                <div class="math-row"><span>Net trade-in</span><span id="sum-net-tradein">—</span></div>
+              </div>
+              <div style="margin-top:14px;padding:12px;background:var(--blue-bg);border:1.5px solid #C5D9F5;border-radius:var(--r-sm);color:var(--blue);font-size:12px;font-weight:600;line-height:1.5;">
+                <span id="upg-emi-saving-note">Current EMI saved when old car leaves: —</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UPGRADE STEP 3: New Car Selection -->
+        <div id="upg-step3" style="display:none;margin-top:28px;">
+          <div style="margin-bottom:20px;">
+            <div class="section-label">New Car Options</div>
+            <h2 style="font-size:clamp(24px,3vw,36px);">Pick your upgrade</h2>
+            <p style="font-size:14px;color:var(--ink-50);margin-top:6px;">Showing net EMI after your trade-in credit. Delivery dates are confirmed at booking.</p>
+          </div>
+          <div id="upg-new-car-grid" class="cars-grid" style="grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:20px;"></div>
+          <div style="text-align:center;">
+            <button class="btn btn-ghost" onclick="resetUpgrade()" style="height:44px;">← Start over</button>
+          </div>
+        </div>
+
+        <!-- UPGRADE STEP 4: Final Summary -->
+        <div id="upg-step4" style="display:none;margin-top:28px;">
+          <div style="max-width:680px;margin:0 auto;">
+            <div class="swap-box" style="box-shadow:var(--shadow-elevated);">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+                <div class="step-num" style="background:var(--green-bg);color:var(--green);">✓</div>
+                <div>
+                  <div style="font-size:18px;font-weight:700;">Your upgrade plan</div>
+                  <div style="font-size:13px;color:var(--ink-50);">Zero double-EMI — old car leaves before new EMI starts</div>
+                </div>
+              </div>
+
+              <!-- Selected new car -->
+              <div style="padding:14px;background:var(--surface);border-radius:var(--r-sm);border:1px solid var(--line);margin-bottom:16px;">
+                <div style="font-size:12px;color:var(--ink-50);margin-bottom:4px;">New car selected</div>
+                <div style="font-size:17px;font-weight:700;" id="final-car-name">—</div>
+                <div style="font-size:13px;color:var(--ink-50);" id="final-car-variant">—</div>
+              </div>
+
+              <!-- EMI breakdown table -->
+              <div style="border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;margin-bottom:16px;">
+                <div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px;">
+                  <span style="color:var(--ink-50);">Old car EMI saved</span>
+                  <span id="final-old-emi" style="font-weight:600;">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px;">
+                  <span style="color:var(--ink-50);">Trade-in credit applied</span>
+                  <span id="final-tradein" style="font-weight:600;">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px;">
+                  <span style="color:var(--ink-50);">New car loan needed</span>
+                  <span id="final-loan-needed" style="font-weight:600;">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px;">
+                  <span style="color:var(--ink-50);">New car EMI</span>
+                  <span id="final-new-emi" style="font-weight:600;color:var(--red);">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:14px;background:#FFF0EC;font-size:16px;font-weight:700;">
+                  <span>Net monthly change</span>
+                  <span id="final-net-change" style="color:var(--red);">—</span>
+                </div>
+              </div>
+
+              <!-- Delivery timeline -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+                <div style="background:var(--green-bg);border-radius:var(--r-sm);padding:14px;">
+                  <div style="font-size:11px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Old car pickup</div>
+                  <div style="font-size:17px;font-weight:700;color:var(--ink);" id="final-pickup">Day 0–3</div>
+                  <div style="font-size:12px;color:var(--ink-50);margin-top:2px;">RC transfer coordinated</div>
+                </div>
+                <div style="background:var(--blue-bg);border-radius:var(--r-sm);padding:14px;">
+                  <div style="font-size:11px;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">New car delivery</div>
+                  <div style="font-size:17px;font-weight:700;color:var(--ink);" id="final-delivery">—</div>
+                  <div style="font-size:12px;color:var(--ink-50);margin-top:2px;">Insurance activated on arrival</div>
+                </div>
+              </div>
+
+              <div class="loan-note" id="final-gap-note">No double-EMI: old car leaves Day 3, new EMI starts only after delivery.</div>
+
+              <button class="btn btn-primary" style="width:100%;height:52px;font-size:15px;margin-top:8px;" onclick="bookUpgrade()">
+                Book this upgrade →
+              </button>
+              <button class="btn btn-ghost" style="width:100%;height:44px;margin-top:8px;" onclick="showUpgStep(3)">
+                ← Change new car
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -1259,8 +1502,6 @@
     const budgetEl   = document.getElementById('budget');
     const budgetText = document.getElementById('budgetText');
     const lockedBudget = document.getElementById('lockedBudget');
-    const lenderList = document.getElementById('lenderList');
-    const lockToken = document.getElementById('lockToken');
     const dealerGate = document.getElementById('dealerGate');
     const apiStatus  = document.getElementById('apiStatus');
     // In production, REPLACE this with your Render backend URL:
@@ -1285,8 +1526,241 @@
       btn.addEventListener('click', () => {
         document.querySelectorAll('.segment').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        if (btn.textContent.trim().toLowerCase().includes('upgrad')) {
+          setTimeout(() => document.getElementById('upgrade').scrollIntoView({behavior:'smooth'}), 150);
+        }
       });
     });
+
+    // ─── UPGRADE FLOW ─────────────────────────────────────────────────────────
+    let upgState = { loanStatus: 'no', selectedAction: null, selectedCar: null, valuation: null };
+
+    function setUpgLoan(val) {
+      upgState.loanStatus = val;
+      ['upg-loan-no','upg-loan-yes','upg-loan-closed'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
+      const map = { no:'upg-loan-no', yes:'upg-loan-yes', closed:'upg-loan-closed' };
+      const el = document.getElementById(map[val]);
+      if (el) el.classList.add('active');
+      const fields = document.getElementById('upg-loan-fields');
+      if (fields) fields.style.display = val === 'yes' ? 'block' : 'none';
+    }
+
+    function showUpgStep(n) {
+      ['upg-step1','upg-step2','upg-step3','upg-step4'].forEach((id,i) => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = (i+1 === n) ? 'block' : 'none';
+      });
+    }
+
+    function resetUpgrade() {
+      upgState = { loanStatus: 'no', selectedAction: null, selectedCar: null, valuation: null };
+      showUpgStep(1);
+      document.getElementById('upg-step2').style.display = 'none';
+      document.getElementById('upg-step3').style.display = 'none';
+      document.getElementById('upg-step4').style.display = 'none';
+      document.getElementById('upg-step1').style.display = 'block';
+    }
+
+    function fmt(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
+    function fmtL(n) { const l = (n/100000); return l === Math.floor(l) ? '₹'+l+'L' : '₹'+(l.toFixed(1))+'L'; }
+
+    async function runUpgradeValuation() {
+      const make = document.getElementById('upg-make').value;
+      const model = document.getElementById('upg-model').value;
+      if (!make) { alert('Please select your car brand.'); return; }
+
+      const payload = {
+        make, model: model || make,
+        year: document.getElementById('upg-year').value,
+        km: document.getElementById('upg-km').value,
+        condition: document.getElementById('upg-condition').value,
+        outstandingLoan: upgState.loanStatus === 'yes' ? numeric(document.getElementById('upg-outstanding').value) : 0,
+        currentEmi: upgState.loanStatus === 'yes' ? numeric(document.getElementById('upg-current-emi').value) : 0,
+        city: document.getElementById('upg-city').value
+      };
+
+      const btn = document.querySelector('#upg-step1 .btn-primary');
+      btn.textContent = 'Calculating…'; btn.disabled = true;
+
+      let result;
+      try {
+        result = await api('/api/upgrade/calculate', payload);
+      } catch {
+        // Offline fallback
+        result = offlineUpgradeCalc(payload);
+      }
+
+      upgState.valuation = result;
+      upgState.payload = payload;
+      renderValuationStep(result, payload);
+      btn.textContent = 'Get my car\'s value →'; btn.disabled = false;
+
+      document.getElementById('upg-step1').style.display = 'none';
+      document.getElementById('upg-step2').style.display = 'block';
+      document.getElementById('upg-step3').style.display = 'none';
+      document.getElementById('upg-step4').style.display = 'none';
+      document.getElementById('upgrade').scrollIntoView({behavior:'smooth'});
+    }
+
+    function offlineUpgradeCalc(p) {
+      const baseValues = { maruti:420000,hyundai:450000,tata:430000,honda:500000,toyota:520000,mahindra:470000,kia:480000,volkswagen:490000 };
+      let base = baseValues[p.make] || 440000;
+      const year = Number(p.year); const km = Number(p.km); const currentYear = new Date().getFullYear();
+      const age = currentYear - year;
+      let dep = age<=1?0.15:age===2?0.27:age<=5?0.27+(age-2)*0.10:0.57+(age-5)*0.08;
+      dep = Math.min(dep, 0.70);
+      let val = base * (1-dep);
+      const condMap = {excellent:1.08,good:1.0,average:0.88,poor:0.72};
+      val *= condMap[p.condition] || 1.0;
+      val = Math.round(val/1000)*1000;
+      const sellDaysMap = {excellent:{min:4,max:7},good:{min:7,max:12},average:{min:14,max:21},poor:{min:20,max:35}};
+      const cond = p.condition || 'good';
+      function emiOffline(principal,rate=0.105,months=72){const r=rate/12;return Math.round((principal*r*Math.pow(1+r,months))/(Math.pow(1+r,months)-1));}
+      const netTradeIn = Math.max(0, val - Number(p.outstandingLoan||0));
+      const upgradeInventory = [
+        {id:'upg-i20-2024',name:'Hyundai i20 Magna',variant:'1.2 Petrol MT',year:2024,fuel:'Petrol',exShowroom:750000,onRoad:820000,deliveryDays:{min:7,max:10}},
+        {id:'upg-baleno-2024',name:'Maruti Baleno Delta',variant:'1.2 Petrol MT',year:2024,fuel:'Petrol',exShowroom:700000,onRoad:765000,deliveryDays:{min:3,max:5}},
+        {id:'upg-altroz-2024',name:'Tata Altroz XE',variant:'1.2 Petrol MT',year:2024,fuel:'Petrol',exShowroom:660000,onRoad:720000,deliveryDays:{min:5,max:7}},
+        {id:'upg-nexon-2024',name:'Tata Nexon Smart',variant:'1.2 Petrol MT',year:2024,fuel:'Petrol',exShowroom:870000,onRoad:950000,deliveryDays:{min:10,max:14}}
+      ];
+      const upgradeCars = upgradeInventory.map(car => {
+        const loanNeeded = Math.max(0, car.onRoad - netTradeIn);
+        const newEmi = emiOffline(loanNeeded);
+        return {...car, loanNeeded, newEmi, netEmiChange: newEmi - Number(p.currentEmi||0),
+          rto:Math.round(car.exShowroom*0.035),insurance:12000,processing:3500,
+          totalOnRoad:car.exShowroom+Math.round(car.exShowroom*0.035)+12000+3500,
+          deliveryDate:{earliest:'Day '+car.deliveryDays.min,latest:'Day '+car.deliveryDays.max}};
+      });
+      return {
+        valuation:{rangeMin:Math.round(val*0.94/1000)*1000,rangeMax:Math.round(val*1.06/1000)*1000,midValue:val,
+          sellDays:sellDaysMap[cond]||{min:7,max:12},demandLevel:cond==='excellent'||cond==='good'?'HIGH':'LOW',age,condKey:cond},
+        netTradeIn, outstandingLoan:Number(p.outstandingLoan||0), currentEmi:Number(p.currentEmi||0),
+        pickupTimeline:{min:0,max:3}, upgradeCars
+      };
+    }
+
+    function renderValuationStep(result, payload) {
+      const v = result.valuation;
+      const make = (payload.make||'').charAt(0).toUpperCase()+(payload.make||'').slice(1);
+      const model = payload.model || make;
+      document.getElementById('upg-car-summary-text').textContent = `${payload.year} ${make} ${model} · ${v.condKey} condition · ${document.getElementById('upg-city').value}`;
+      document.getElementById('upg-price-range').innerHTML = `${fmtL(v.rangeMin)} – ${fmtL(v.rangeMax)}<div style="font-size:12px;font-weight:400;margin-top:4px;opacity:0.75;">Dealer bids open today</div>`;
+      const demandColors = {HIGH:'var(--green)',MEDIUM:'var(--amber)',LOW:'var(--red)'};
+      const demandLabels = {HIGH:'High demand',MEDIUM:'Moderate demand',LOW:'Low demand'};
+      document.getElementById('upg-demand-badge').innerHTML = `<span style="font-size:12px;font-weight:700;color:${demandColors[v.demandLevel]||'var(--green)'};">● ${demandLabels[v.demandLevel]||'Market active'}</span>`;
+      document.getElementById('upg-sell-days').textContent = `${v.sellDays.min}–${v.sellDays.max} days`;
+      document.getElementById('sum-car-value').textContent = fmtL(v.midValue);
+      document.getElementById('sum-loan').textContent = result.outstandingLoan > 0 ? `–${fmtL(result.outstandingLoan)}` : '₹0';
+      document.getElementById('sum-net-tradein').textContent = fmtL(result.netTradeIn);
+      const emiSaved = result.currentEmi > 0 ? `Current EMI of ${fmt(result.currentEmi)}/mo saved when old car leaves.` : 'No current EMI — full trade-in value applies.';
+      document.getElementById('upg-emi-saving-note').textContent = emiSaved;
+    }
+
+    function selectUpgAction(type) {
+      upgState.selectedAction = type;
+      const dealer = document.getElementById('upg-action-dealer');
+      const upgrade = document.getElementById('upg-action-upgrade');
+      const btn = document.getElementById('upg-action-btn');
+      dealer.style.borderColor = type === 'dealer' ? 'var(--red)' : 'var(--line)';
+      dealer.style.background = type === 'dealer' ? '#FFF3F0' : 'white';
+      upgrade.style.borderColor = type === 'upgrade' ? 'var(--red)' : 'var(--line)';
+      upgrade.style.background = type === 'upgrade' ? '#FFF3F0' : 'white';
+      btn.textContent = type === 'dealer' ? 'Request dealer call →' : 'See new car options →';
+    }
+
+    function doUpgradeAction() {
+      if (!upgState.selectedAction) return;
+      if (upgState.selectedAction === 'dealer') {
+        logEvent({ eventType: 'dealer_gate', cta: 'upgrade_dealer_call' });
+        alert('A CarDekho relationship manager will call you within 2 hours with competitive dealer bids for your car.');
+      } else {
+        renderNewCarGrid();
+        document.getElementById('upg-step3').style.display = 'block';
+        document.getElementById('upg-step3').scrollIntoView({behavior:'smooth'});
+      }
+    }
+
+    function renderNewCarGrid() {
+      const grid = document.getElementById('upg-new-car-grid');
+      const cars = upgState.valuation?.upgradeCars || [];
+      grid.innerHTML = cars.map((car,i) => {
+        const isPopular = i === 0;
+        const netSign = car.netEmiChange >= 0 ? '+' : '';
+        const netColor = car.netEmiChange <= 0 ? 'var(--green)' : 'var(--red)';
+        return `<article style="background:white;border:1.5px solid var(--line);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:all 0.2s;" id="upg-car-${i}" onclick="selectNewCar(${i})">
+          <div style="padding:20px 22px 22px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+              <div>
+                ${isPopular ? '<span style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;background:var(--green-bg);color:var(--green);margin-bottom:6px;">Popular choice</span><br>' : ''}
+                <div style="font-size:18px;font-weight:700;font-family:\'Playfair Display\',serif;">${car.name}</div>
+                <div style="font-size:12px;color:var(--ink-50);">${car.variant} · ${car.year}</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:12px;color:var(--ink-50);">Ex-showroom</div>
+                <div style="font-size:16px;font-weight:700;">${fmtL(car.exShowroom)}</div>
+              </div>
+            </div>
+            <div style="height:1px;background:var(--line);margin:12px 0;"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+              <div style="background:var(--surface);border-radius:var(--r-sm);padding:10px;">
+                <div style="font-size:11px;color:var(--ink-50);">New car EMI</div>
+                <div style="font-size:20px;font-weight:900;color:var(--red);font-family:\'Playfair Display\',serif;">${fmt(car.newEmi)}<span style="font-size:13px;font-weight:400;">/mo</span></div>
+              </div>
+              <div style="background:var(--surface);border-radius:var(--r-sm);padding:10px;">
+                <div style="font-size:11px;color:var(--ink-50);">Net monthly change</div>
+                <div style="font-size:18px;font-weight:700;color:${netColor};">${netSign}${fmt(car.netEmiChange)}<span style="font-size:12px;font-weight:400;">/mo</span></div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+              <span style="color:var(--ink-50);">Loan needed: <strong style="color:var(--ink);">${fmtL(car.loanNeeded)}</strong></span>
+              <span style="color:var(--blue);font-weight:600;">Delivery: ${car.deliveryDate.earliest}–${car.deliveryDate.latest.replace('Day ','')}</span>
+            </div>
+            <button style="width:100%;margin-top:14px;height:42px;background:transparent;border:1.5px solid var(--red);border-radius:var(--r-sm);color:var(--red);font-weight:600;font-size:14px;cursor:pointer;" onclick="selectNewCar(${i})">
+              Select this car →
+            </button>
+          </div>
+        </article>`;
+      }).join('');
+    }
+
+    function selectNewCar(idx) {
+      const cars = upgState.valuation?.upgradeCars || [];
+      upgState.selectedCar = cars[idx];
+      const result = upgState.valuation;
+
+      // Highlight selected
+      cars.forEach((_,i) => {
+        const el = document.getElementById(`upg-car-${i}`);
+        if (el) el.style.borderColor = i === idx ? 'var(--red)' : 'var(--line)';
+      });
+
+      // Populate final summary
+      const car = upgState.selectedCar;
+      document.getElementById('final-car-name').textContent = car.name;
+      document.getElementById('final-car-variant').textContent = `${car.variant} · ${car.year} · On-road: ${fmtL(car.totalOnRoad||car.onRoad)}`;
+      document.getElementById('final-old-emi').textContent = result.currentEmi > 0 ? `–${fmt(result.currentEmi)}/mo` : 'N/A';
+      document.getElementById('final-tradein').textContent = `–${fmtL(result.netTradeIn)}`;
+      document.getElementById('final-loan-needed').textContent = fmtL(car.loanNeeded);
+      document.getElementById('final-new-emi').textContent = `${fmt(car.newEmi)}/mo`;
+      const netSign = car.netEmiChange >= 0 ? '+' : '';
+      document.getElementById('final-net-change').textContent = `${netSign}${fmt(car.netEmiChange)}/mo`;
+      document.getElementById('final-pickup').textContent = `Day ${result.pickupTimeline.min}–${result.pickupTimeline.max}`;
+      document.getElementById('final-delivery').textContent = `${car.deliveryDate.earliest} – ${car.deliveryDate.latest}`;
+      document.getElementById('final-gap-note').textContent = `No double-EMI: old car leaves Day ${result.pickupTimeline.max}, new EMI starts only after ${car.deliveryDate.earliest} delivery.`;
+
+      document.getElementById('upg-step4').style.display = 'block';
+      document.getElementById('upg-step4').scrollIntoView({behavior:'smooth'});
+    }
+
+    function bookUpgrade() {
+      const car = upgState.selectedCar;
+      if (!car) return;
+      logEvent({ eventType: 'upgrade_booked', carName: car.name, newEmi: car.newEmi, netChange: car.netEmiChange });
+      alert(`Booking confirmed for ${car.name}!\n\nA CarDekho manager will contact you within 2 hours to:\n1. Schedule your old car inspection and pickup (Day 0–3)\n2. Confirm your new car delivery slot (${car.deliveryDate.earliest}–${car.deliveryDate.latest})\n3. Initiate loan paperwork\n\nNo double-EMI guaranteed.`);
+    }
 
     document.querySelectorAll('.tab').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1296,14 +1770,6 @@
     });
 
     function numeric(v) { return Number(String(v||'').replace(/[^0-9]/g,'')) || 0; }
-
-    function formatLakhs(v) {
-      return 'Rs ' + (Number(v || 0) / 100000).toFixed(1).replace('.0', '') + 'L';
-    }
-
-    function formatRs(v) {
-      return 'Rs ' + Number(v || 0).toLocaleString('en-IN');
-    }
 
     function selectedSegment() {
       const t = document.querySelector('.segment.active')?.textContent.trim().toLowerCase() || '';
@@ -1347,11 +1813,19 @@
     }
 
     async function runEligibility() {
+      const approvalCard = document.getElementById('approvalCard');
+      const lenderList = document.getElementById('lenderList');
+      const verdictEl = document.getElementById('eligibilityVerdict');
+      const fitBadges = document.getElementById('fitBadges');
+      const postCheckNote = document.getElementById('postCheckNote');
+
+      approvalCard.innerHTML = '<span style="font-size:14px;font-weight:500;color:#555;">Calculating your eligibility…</span>';
+
       const payload = {
         userId: sessionId,
         monthlyIncome: numeric(document.getElementById('monthlyIncome').value),
         existingEmis: numeric(document.getElementById('existingEmis').value),
-        monthlyBudget: numeric(budgetEl.value),
+        monthlyBudget: numeric(budgetEl.value) || numeric(document.getElementById('monthlyIncome').value) * 0.3,
         age: numeric(document.getElementById('ageInput').value),
         jobStabilityMonths: numeric(document.getElementById('jobStability').value),
         bureauScore: numeric(document.getElementById('bureauScore').value),
@@ -1359,35 +1833,229 @@
         city: document.getElementById('cityInput').value || 'Delhi NCR',
         intent: { segment: selectedSegment(), visits: Number(localStorage.getItem('cd_visits')||1), budgetChanges: Number(localStorage.getItem('cd_budget_changes')||0) }
       };
+
       try {
         const aff = await api('/api/affordability', payload);
         const match = await api('/api/match', {...payload, affordability: aff});
-        const low = formatLakhs(aff.loanRange?.min || aff.worstCase);
-        const high = formatLakhs(aff.loanRange?.max || aff.bestCase || aff.maxLoan);
-        const approvalCard = document.querySelector('.approval-card');
-        const curve = [
-          { amount: aff.bestCase || aff.maxLoan, probability: aff.approvalProbability },
-          { amount: Math.round((aff.bestCase || aff.maxLoan) * 0.9), probability: Math.min(96, aff.approvalProbability + 10) },
-          { amount: Math.round((aff.bestCase || aff.maxLoan) * 0.8), probability: Math.min(98, aff.approvalProbability + 18) }
-        ];
-        lockedBudget.textContent = `Soft-check result: ${low} - ${high}. Approval probability ${aff.approvalProbability}% at requested budget. Confidence: ${aff.confidence}.`;
-        approvalCard.innerHTML = `Estimated range<span>${low} - ${high}</span>${aff.confidence} confidence before document verification<div class="probability-grid">${curve.map(row => `<div class="probability-pill">${formatLakhs(row.amount)}<br>${row.probability}%</div>`).join('')}</div>`;
-        lenderList.innerHTML = (aff.offers || []).slice(0, 4).map(offer => `<div class="lender-row"><span>${offer.lender}<br>${offer.interestRate}% for ${offer.tenureMonths} mo</span><strong>${formatLakhs(offer.approvedAmount)} | ${offer.approvalProbability}%</strong></div>`).join('');
-        lockToken.textContent = `Rate signal locked: ${aff.lockToken} | valid for ${aff.tokenValidHours} hours. Use this before dealer contact.`;
-        lockToken.classList.add('active');
-        applyMatches(match);
+
+        const minL = (aff.worstCase / 100000).toFixed(1).replace('.0','');
+        const maxL = (aff.bestCase / 100000).toFixed(1).replace('.0','');
+        const safeMin = aff.safeEmiRange.min.toLocaleString('en-IN');
+        const safeMax = aff.safeEmiRange.max.toLocaleString('en-IN');
+        const prob = aff.approvalProbability;
+        const conf = aff.confidence;
+        const confColor = conf === 'HIGH' ? 'var(--green)' : conf === 'MEDIUM' ? 'var(--amber)' : 'var(--red)';
+
+        // Update approval card with real data
+        const curve = aff.offers ? aff.offers.slice(0,3) : [];
+        approvalCard.innerHTML = `
+          Estimated loan range
+          <span>Rs ${minL}L – Rs ${maxL}L</span>
+          <span class="conf-badge" style="color:${confColor};background:${conf==='HIGH'?'rgba(0,107,77,0.10)':conf==='MEDIUM'?'rgba(122,77,8,0.10)':'rgba(200,49,26,0.10)'}">
+            ${conf} confidence
+          </span>
+          Safe EMI band: ₹${safeMin}–₹${safeMax}/month
+          <div class="probability-grid">
+            ${curve.map(o => `<div class="probability-pill">
+              <span class="pill-amount">₹${(o.approvedAmount/100000).toFixed(1)}L</span>
+              <span class="pill-prob">${o.approvalProbability}% approval</span>
+            </div>`).join('')}
+          </div>`;
+
+        // Show lender breakdown
+        lenderList.innerHTML = (aff.offers || []).slice(0,3).map(o =>
+          `<div class="lender-row">
+            <div class="lender-info">
+              <span class="lender-name">${o.lender}</span>
+              <span class="lender-meta">${o.interestRate}% · ${o.tenureMonths} months</span>
+            </div>
+            <span class="lender-amount" style="color:${o.decision==='LIKELY'?'var(--green)':'var(--amber)'}">₹${(o.approvedAmount/100000).toFixed(1)}L · ${o.approvalProbability}%</span>
+          </div>`
+        ).join('');
+
+        // Verdict message
+        const budget = payload.monthlyBudget;
+        const canAfford = match.cars.filter(c => c.fit.status === 'FIT').length;
+        verdictEl.style.display = 'block';
+        verdictEl.style.background = canAfford > 0 ? 'var(--green-bg)' : '#FFF8F5';
+        verdictEl.style.border = `1.5px solid ${canAfford > 0 ? '#C0E5D5' : '#EDD8A4'}`;
+        verdictEl.style.color = canAfford > 0 ? 'var(--green)' : 'var(--amber)';
+        verdictEl.innerHTML = canAfford > 0
+          ? `✅ <strong>${canAfford} car${canAfford>1?'s':''} fit your budget.</strong> Scroll down to see them — your approval band is locked in.`
+          : `⚠️ <strong>Your budget of ₹${budget.toLocaleString('en-IN')}/month is below all current inventory.</strong> Cars start at ₹6,950/month. Consider a down payment to lower EMI.`;
+
+        // Update step 3 badges
+        const fitCars = match.cars.filter(c => c.fit.status === 'FIT');
+        const overCars = match.cars.filter(c => c.fit.status !== 'FIT');
+        fitBadges.innerHTML = fitCars.map(c => `<span class="badge green">${c.name.split(' ').slice(1).join(' ')} fits</span>`).join('')
+          + overCars.map(c => `<span class="badge amber">+₹${c.fit.extraEmi.toLocaleString('en-IN')}/mo for ${c.name.split(' ')[0]} ${c.name.split(' ')[1]}</span>`).join('');
+
+        postCheckNote.style.display = 'block';
+        postCheckNote.innerHTML = `Rate locked for 24 hrs · Token: <strong>${aff.lockToken}</strong><br>Go to cars below → pick your fit → Lock & Call Dealer.`;
+
+        // Update sidebar locked budget
+        lockedBudget.textContent = `Approved: ₹${minL}L–₹${maxL}L · EMI band ₹${safeMin}–₹${safeMax}/month`;
         lockedBudget.classList.add('active');
-        await logEvent({ eventType:'eligibility_check', safeEmiMin:aff.safeEmiRange.min, safeEmiMax:aff.safeEmiRange.max, approvalProbability: aff.approvalProbability, confidence: aff.confidence, lockToken: aff.lockToken, cta:'run_soft_check' });
-        document.getElementById('results').scrollIntoView({behavior:'smooth'});
-      } catch {
-        lockBudget();
+
+        // Apply fit/over styling to car cards
+        applyMatches(match);
+
+        // Reveal "Lock & Call" CTAs on cards, hide "Check Eligibility" CTAs
+        document.querySelectorAll('.pre-check-actions').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.post-check-actions').forEach(el => el.style.display = 'flex');
+
+        await logEvent({ eventType:'eligibility_check', safeEmiMin:aff.safeEmiRange.min, safeEmiMax:aff.safeEmiRange.max, approvalProbability: prob, confidence: conf, lockToken: aff.lockToken, cta:'run_soft_check' });
+
+        // Do NOT auto-scroll — user reads results first, then clicks "Continue to matching cars"
+
+      } catch(err) {
+        // ── CLIENT-SIDE FALLBACK: compute offline when backend is unreachable ──
+        runEligibilityOffline();
       }
+    }
+
+    // Full offline affordability engine (mirrors server logic)
+    function runEligibilityOffline() {
+      const approvalCard = document.getElementById('approvalCard');
+      const lenderList = document.getElementById('lenderList');
+      const verdictEl = document.getElementById('eligibilityVerdict');
+      const fitBadges = document.getElementById('fitBadges');
+      const postCheckNote = document.getElementById('postCheckNote');
+
+      const income = numeric(document.getElementById('monthlyIncome').value) || 55000;
+      const existingEmis = numeric(document.getElementById('existingEmis').value) || 0;
+      const age = numeric(document.getElementById('ageInput').value) || 31;
+      const jobMonths = numeric(document.getElementById('jobStability').value) || 24;
+      const bureauScore = numeric(document.getElementById('bureauScore').value) || 700;
+      const empType = document.getElementById('employmentType').value || 'Salaried';
+      const city = document.getElementById('cityInput').value || 'Delhi NCR';
+      const requestedBudget = numeric(budgetEl.value) || Math.round(income * 0.3);
+
+      // FOIR-based disposable EMI
+      const foirLimit = bureauScore >= 760 ? 0.46 : bureauScore >= 700 ? 0.40 : bureauScore >= 640 ? 0.34 : 0.28;
+      const disposableEmi = Math.max(2500, Math.round(income * foirLimit - existingEmis));
+      const ageFactor = age < 24 ? 0.88 : age > 55 ? 0.90 : 1;
+      const stabilityFactor = jobMonths < 6 ? 0.82 : jobMonths < 18 ? 0.94 : 1.04;
+      const empFactor = /gov|psu|mnc|listed/i.test(empType) ? 1.06 : /self|gig/i.test(empType) ? 0.90 : 1.0;
+      const cityFactor = /jaipur|lucknow|indore|bhopal|tier.2/i.test(city) ? 0.95 : 1;
+      const adjEmi = Math.round(disposableEmi * ageFactor * stabilityFactor * empFactor * cityFactor);
+
+      function pmtReverse(emi, rate=0.105, months=72) {
+        const r = rate/12;
+        return Math.round(emi * ((1 - Math.pow(1+r,-months))/r));
+      }
+      function emiForLoan(principal, rate=0.105, months=72) {
+        const r = rate/12;
+        return Math.round((principal*r*Math.pow(1+r,months))/(Math.pow(1+r,months)-1));
+      }
+
+      const lenders = [
+        { name:'Rupyy Prime NBFC', rate:10.4, months:72, factor:1.02 },
+        { name:'Partner Bank', rate:10.9, months:72, factor:0.94 },
+        { name:'Fast NBFC', rate:12.2, months:60, factor:0.86 }
+      ];
+
+      const offers = lenders.map(l => {
+        const emi = Math.round(adjEmi * l.factor);
+        const amount = pmtReverse(emi, l.rate/100, l.months);
+        const prob = Math.min(92, Math.max(30, Math.round(60 + (bureauScore-650)/8 + (jobMonths>18?8:0) - (existingEmis/income)*40)));
+        return { name: l.name, rate: l.rate, months: l.months, emi, amount, prob };
+      });
+
+      const worstCase = Math.min(...offers.map(o=>o.amount));
+      const bestCase = Math.max(...offers.map(o=>o.amount));
+      const safeMin = Math.max(3000, Math.round(Math.min(...offers.map(o=>o.emi)) - 300));
+      const safeMax = Math.round(Math.min(requestedBudget + 600, Math.max(...offers.map(o=>o.emi))));
+      const prob = offers[0].prob;
+      const conf = bureauScore >= 740 && jobMonths >= 18 ? 'HIGH' : bureauScore >= 680 ? 'MEDIUM' : 'LOW';
+      const confColor = conf==='HIGH' ? 'var(--green)' : conf==='MEDIUM' ? 'var(--amber)' : 'var(--red)';
+      const token = 'CD-' + Math.random().toString(36).slice(2,10).toUpperCase();
+
+      const minL = (worstCase/100000).toFixed(1).replace('.0','');
+      const maxL = (bestCase/100000).toFixed(1).replace('.0','');
+
+      approvalCard.innerHTML = `
+        Estimated loan range
+        <span>Rs ${minL}L – Rs ${maxL}L</span>
+        <span class="conf-badge" style="color:${confColor};background:${conf==='HIGH'?'rgba(0,107,77,0.10)':conf==='MEDIUM'?'rgba(122,77,8,0.10)':'rgba(200,49,26,0.10)'}">
+          ${conf} confidence
+        </span>
+        Safe EMI band: ₹${safeMin.toLocaleString('en-IN')}–₹${safeMax.toLocaleString('en-IN')}/month
+        <div class="probability-grid">
+          ${offers.map(o=>`<div class="probability-pill">
+            <span class="pill-amount">₹${(o.amount/100000).toFixed(1)}L</span>
+            <span class="pill-prob">${o.prob}% approval</span>
+          </div>`).join('')}
+        </div>
+        <div style="margin-top:8px;font-size:11px;opacity:0.6;font-weight:400;">Offline estimate · may vary from live engine</div>`;
+
+      lenderList.innerHTML = offers.map(o =>
+        `<div class="lender-row">
+          <div class="lender-info">
+            <span class="lender-name">${o.name}</span>
+            <span class="lender-meta">${o.rate}% · ${o.months} months</span>
+          </div>
+          <span class="lender-amount" style="color:var(--green)">₹${(o.amount/100000).toFixed(1)}L · ${o.prob}%</span>
+        </div>`).join('');
+
+      // Inventory cars hardcoded to match backend
+      const inventory = [
+        { name:'Hyundai i20 Sportz', emi:7800 },
+        { name:'Maruti Swift VXI',   emi:6950 },
+        { name:'Tata Nexon XZ+',     emi:9400 },
+        { name:'Honda City VX',      emi:8700 }
+      ];
+      const fitCars = inventory.filter(c => c.emi <= safeMax);
+      const overCars = inventory.filter(c => c.emi > safeMax);
+      const canAfford = fitCars.length;
+
+      verdictEl.style.display = 'block';
+      verdictEl.style.background = canAfford > 0 ? 'var(--green-bg)' : '#FFF8F5';
+      verdictEl.style.border = `1.5px solid ${canAfford > 0 ? '#C0E5D5' : '#EDD8A4'}`;
+      verdictEl.style.color = canAfford > 0 ? 'var(--green)' : 'var(--amber)';
+      verdictEl.innerHTML = canAfford > 0
+        ? `✅ <strong>${canAfford} car${canAfford>1?'s':''} fit your budget.</strong> Scroll down — your approval band is locked in.`
+        : `⚠️ <strong>Your budget is below current inventory.</strong> Cars start at ₹6,950/mo. A ₹50K down payment can reduce EMI by ~₹800/month.`;
+
+      fitBadges.innerHTML = fitCars.map(c=>`<span class="badge green">${c.name.split(' ').slice(1).join(' ')} fits</span>`).join('')
+        + overCars.map(c=>`<span class="badge amber">+₹${(c.emi-safeMax).toLocaleString('en-IN')}/mo for ${c.name.split(' ')[0]}</span>`).join('');
+
+      postCheckNote.style.display = 'block';
+      postCheckNote.innerHTML = `Rate locked for 24 hrs · Token: <strong>${token}</strong><br>Go to cars below → pick your fit → Lock & Call Dealer.`;
+
+      lockedBudget.textContent = `Approved: ₹${minL}L–₹${maxL}L · EMI band ₹${safeMin.toLocaleString('en-IN')}–₹${safeMax.toLocaleString('en-IN')}/month`;
+      lockedBudget.classList.add('active');
+
+      // Apply over-budget styling
+      document.querySelectorAll('.car-card').forEach(card => {
+        const name = card.querySelector('.car-title')?.textContent.trim();
+        const car = inventory.find(c => c.name === name);
+        card.classList.toggle('over-budget', !!car && car.emi > safeMax);
+        const note = card.querySelector('.over-budget-note');
+        if (note && car && car.emi > safeMax)
+          note.textContent = `Above your band: requires about ₹${(car.emi-safeMax).toLocaleString('en-IN')} extra/month`;
+      });
+
+      document.querySelectorAll('.pre-check-actions').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.post-check-actions').forEach(el => el.style.display = 'flex');
+
+      // User reads results first, then clicks "Continue to matching cars" button
+    }
+
+    // Lock rate and call dealer
+    function lockAndCall(btn, carName) {
+      const token = document.getElementById('postCheckNote')?.textContent?.match(/CD-[A-Z0-9]+/)?.[0] || 'CD-XXXXXXXX';
+      btn.textContent = `✅ Rate Locked · Connecting dealer…`;
+      btn.disabled = true;
+      btn.style.background = 'var(--green)';
+      logEvent({ eventType:'dealer_gate', carName, lockToken: token, cta:'lock_and_call' });
+      setTimeout(() => {
+        btn.textContent = `📞 Dealer will call you within 2 hours`;
+      }, 1500);
     }
 
     function lockBudget() {
       lockedBudget.textContent = 'Budget locked. Cars above this band are marked — click any card to check eligibility.';
-      lenderList.innerHTML = '';
-      lockToken.classList.remove('active');
       lockedBudget.classList.add('active');
       document.querySelectorAll('.car-card').forEach(c => c.classList.remove('over-budget'));
       const cards = document.querySelectorAll('.car-card');
