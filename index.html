@@ -776,6 +776,236 @@
       .gallery-main, .gallery-side img { height: 220px; }
       .nav-actions .btn-ghost { display: none; }
     }
+
+    /* ─── URGENT DRAWER ─── */
+    .urgent-drawer {
+      position: fixed; inset: 0; z-index: 300;
+      display: none; align-items: flex-end;
+      background: rgba(5,6,9,0.72);
+      backdrop-filter: blur(4px);
+    }
+    .urgent-drawer.active { display: flex; }
+
+    .urgent-sheet {
+      width: 100%; max-height: 96vh;
+      background: white; border-radius: 20px 20px 0 0;
+      overflow-y: auto; box-shadow: 0 -20px 60px rgba(0,0,0,0.25);
+      animation: slideUp 0.32s cubic-bezier(0.32,0.72,0,1);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .urgent-sheet-header {
+      background: linear-gradient(135deg, #1A0A06 0%, #3D1208 40%, #C8311A 100%);
+      color: white; padding: 28px 28px 24px;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .urgent-sheet-close {
+      position: absolute; top: 16px; right: 18px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); border: none;
+      color: white; font-size: 18px; display: grid; place-items: center;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .urgent-sheet-close:hover { background: rgba(255,255,255,0.28); }
+
+    .urgent-eyebrow-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 100px; padding: 4px 12px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(255,255,255,0.80);
+      margin-bottom: 14px;
+    }
+    .urgent-pulse {
+      width: 7px; height: 7px; border-radius: 50%; background: #F4A54A;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    .urgent-prog-bar {
+      display: flex; align-items: center; gap: 0;
+      padding: 14px 28px; border-bottom: 1px solid var(--line);
+      background: #FAFAFA;
+    }
+    .u-prog-step {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 11px; font-weight: 600; color: var(--ink-20);
+      white-space: nowrap;
+    }
+    .u-prog-step.done { color: var(--green); }
+    .u-prog-step.active { color: var(--red); }
+    .u-prog-dot {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--surface); border: 1.5px solid var(--line);
+      display: grid; place-items: center;
+      font-size: 10px; font-weight: 700; color: var(--ink-50); flex-shrink: 0;
+    }
+    .u-prog-step.done .u-prog-dot { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+    .u-prog-step.active .u-prog-dot { background: #FFF0EC; border-color: var(--red); color: var(--red); }
+    .u-prog-line { flex: 1; height: 1.5px; background: var(--line); margin: 0 10px; min-width: 16px; }
+    .u-prog-line.done { background: var(--green); }
+
+    .urgent-body { padding: 28px; max-width: 680px; margin: 0 auto; }
+
+    /* Screens within drawer */
+    .u-screen { display: none; }
+    .u-screen.active { display: block; animation: fadein 0.25s ease; }
+
+    /* Timeline cards */
+    .u-timeline-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+    @media (max-width: 600px) { .u-timeline-grid { grid-template-columns: 1fr; } }
+    .u-tcard {
+      background: white; border: 2px solid var(--line);
+      border-radius: var(--r-lg); padding: 18px 16px;
+      cursor: pointer; transition: all 0.18s; text-align: left;
+    }
+    .u-tcard:hover { border-color: var(--red); box-shadow: 0 4px 18px rgba(200,49,26,0.12); }
+    .u-tcard.sel { border-color: var(--red); background: #FFF8F6; box-shadow: 0 4px 18px rgba(200,49,26,0.18); }
+    .u-tcard-icon { font-size: 26px; margin-bottom: 10px; display: block; }
+    .u-tcard-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .u-tcard-desc { font-size: 12px; color: var(--ink-50); line-height: 1.5; }
+    .u-tcard-badge {
+      display: inline-block; margin-top: 9px;
+      font-size: 11px; font-weight: 700; padding: 2px 9px;
+      border-radius: 100px; background: var(--green-bg); color: var(--green);
+    }
+    .u-tcard.sel .u-tcard-badge { background: #FFF0EC; color: var(--red); }
+
+    /* RC callout */
+    .rc-callout {
+      background: var(--blue-bg); border: 1.5px solid #C5D9F5;
+      border-radius: var(--r); padding: 14px 16px;
+      font-size: 13px; color: var(--blue); font-weight: 600;
+      line-height: 1.5; margin-bottom: 20px;
+    }
+    .rc-callout strong { display: block; margin-bottom: 3px; font-size: 14px; }
+
+    /* Exchange toggle */
+    .exchange-box {
+      background: white; border: 1.5px solid var(--line);
+      border-radius: var(--r-lg); padding: 18px 20px; margin-bottom: 20px;
+    }
+    .exchange-toggle-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .ex-toggle-label h4 { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+    .ex-toggle-label p { font-size: 12px; color: var(--ink-50); }
+    .u-switch { position: relative; width: 44px; height: 26px; flex-shrink: 0; }
+    .u-switch input { opacity: 0; width: 0; height: 0; }
+    .u-slider-track {
+      position: absolute; inset: 0; border-radius: 13px;
+      background: var(--line); transition: background 0.2s; cursor: pointer;
+    }
+    .u-slider-track::before {
+      content: ''; position: absolute; left: 3px; top: 3px;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+      transition: transform 0.2s;
+    }
+    .u-switch input:checked + .u-slider-track { background: var(--green); }
+    .u-switch input:checked + .u-slider-track::before { transform: translateX(18px); }
+
+    .exchange-detail-box {
+      margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid var(--line);
+      display: none;
+    }
+    .exchange-detail-box.open { display: block; animation: fadein 0.22s ease; }
+
+    /* Valuation result */
+    .val-result {
+      background: var(--green-bg); border: 1.5px solid #C0E5D5;
+      border-radius: var(--r-sm); padding: 12px 14px; margin-top: 10px;
+      display: none;
+    }
+    .val-result .val-range {
+      font-family: 'Playfair Display', serif; font-size: 22px;
+      font-weight: 700; color: var(--green); letter-spacing: -0.02em;
+    }
+    .val-result .val-sub { font-size: 12px; color: var(--green); margin-top: 3px; }
+
+    /* Chip select (car type) */
+    .u-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .u-chip {
+      border: 1.5px solid var(--line); background: white;
+      border-radius: var(--r-sm); padding: 8px 14px;
+      font-size: 13px; font-weight: 600; color: var(--ink-80);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .u-chip:hover { border-color: var(--red); }
+    .u-chip.sel { border-color: var(--red); background: #FFF0EC; color: var(--red); }
+
+    /* Urgent car result cards */
+    .u-cars-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+    @media (max-width: 600px) { .u-cars-grid { grid-template-columns: 1fr; } }
+    .u-car-card {
+      background: white; border: 1px solid var(--line);
+      border-radius: var(--r-lg); overflow: hidden;
+      box-shadow: var(--shadow-card); transition: all 0.2s;
+    }
+    .u-car-card:hover { box-shadow: var(--shadow-elevated); transform: translateY(-2px); }
+    .u-car-card.best-match { border: 2px solid var(--red); }
+
+    .u-car-img-wrap { position: relative; }
+    .u-car-img { width: 100%; height: 160px; object-fit: cover; display: block; background: #EAECF0; }
+    .u-delivery-badge {
+      position: absolute; top: 10px; left: 10px;
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 100px; backdrop-filter: blur(6px);
+    }
+    .u-delivery-badge.today { background: rgba(200,49,26,0.92); color: white; }
+    .u-delivery-badge.d48   { background: rgba(26,79,160,0.88); color: white; }
+    .u-delivery-badge.week  { background: rgba(0,107,77,0.88);  color: white; }
+
+    .u-car-body { padding: 16px 18px 18px; }
+    .u-car-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 2px; letter-spacing: -0.01em; }
+    .u-car-meta { font-size: 12px; color: var(--ink-50); margin-bottom: 12px; }
+    .u-car-emi { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--red); letter-spacing: -0.04em; line-height: 1; }
+    .u-car-emi span { font-size: 14px; font-weight: 400; }
+    .u-net-cost {
+      margin-top: 6px; padding: 8px 10px;
+      background: var(--green-bg); border-radius: var(--r-sm);
+      font-size: 12px; color: var(--green); font-weight: 600;
+    }
+    .u-car-signals { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin: 10px 0; }
+    .u-signal {
+      height: 40px; border: 1px solid var(--line); border-radius: var(--r-sm);
+      background: var(--surface); display: grid; place-items: center;
+      font-size: 10px; font-weight: 600; color: var(--ink-80); text-align: center; padding: 3px;
+    }
+
+    /* RC timeline in reserve screen */
+    .u-rc-timeline {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--r); padding: 18px 20px; margin-bottom: 16px;
+    }
+    .u-rc-steps { display: flex; align-items: flex-start; margin-top: 14px; }
+    .u-rc-step { flex: 1; text-align: center; position: relative; }
+    .u-rc-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: grid; place-items: center; margin: 0 auto 6px;
+      font-size: 12px; font-weight: 700; border: 2px solid var(--line);
+      background: white; color: var(--ink-50);
+    }
+    .u-rc-dot.done { background: var(--green); border-color: var(--green); color: white; }
+    .u-rc-dot.active { background: #FFF0EC; border-color: var(--red); color: var(--red); }
+    .u-rc-step-line {
+      position: absolute; top: 13px; left: 50%; right: -50%;
+      height: 2px; background: var(--line); z-index: 0;
+    }
+    .u-rc-step-line.done { background: var(--green); }
+    .u-rc-label { font-size: 11px; font-weight: 600; color: var(--ink-80); }
+    .u-rc-sub { font-size: 10px; color: var(--ink-50); margin-top: 2px; }
+
+    /* Reserve guarantee box */
+    .u-guarantee {
+      background: #FFF8F0; border: 1.5px solid #F5C99A;
+      border-radius: var(--r); padding: 14px 16px; margin-bottom: 16px;
+    }
+    .u-guarantee-title { font-size: 14px; font-weight: 700; color: var(--amber); margin-bottom: 4px; }
+    .u-guarantee-sub { font-size: 13px; color: var(--amber); line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -1498,6 +1728,313 @@
     </div>
   </div>
 
+  <!-- ─── URGENT NEED DRAWER ─── -->
+  <div class="urgent-drawer" id="urgentDrawer" role="dialog" aria-modal="true" aria-labelledby="urgentDrawerTitle">
+    <div class="urgent-sheet">
+
+      <!-- Header -->
+      <div class="urgent-sheet-header" style="position:relative;">
+        <button class="urgent-sheet-close" onclick="closeUrgentDrawer()" aria-label="Close">✕</button>
+        <div class="urgent-eyebrow-pill">
+          <span class="urgent-pulse"></span>
+          Urgent Need Mode
+        </div>
+        <h2 id="urgentDrawerTitle" style="font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,40px);font-weight:900;line-height:1;letter-spacing:-0.03em;margin-bottom:10px;">
+          Car ready in days,<br>not weeks.
+        </h2>
+        <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,0.75);max-width:460px;">
+          We show you only cars with clean RC, zero challans, and same-city RTO — so you can drive today and let us handle all paperwork.
+        </p>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="urgent-prog-bar">
+        <div class="u-prog-step active" id="up1"><div class="u-prog-dot">1</div>Timeline</div>
+        <div class="u-prog-line" id="upl1"></div>
+        <div class="u-prog-step" id="up2"><div class="u-prog-dot">2</div>Preferences</div>
+        <div class="u-prog-line" id="upl2"></div>
+        <div class="u-prog-step" id="up3"><div class="u-prog-dot">3</div>Results</div>
+        <div class="u-prog-line" id="upl3"></div>
+        <div class="u-prog-step" id="up4"><div class="u-prog-dot">4</div>Reserve</div>
+      </div>
+
+      <div class="urgent-body">
+
+        <!-- ── SCREEN 1: Timeline ── -->
+        <div class="u-screen active" id="us1">
+          <h3 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px;">When do you need the car?</h3>
+          <p style="font-size:14px;color:var(--ink-50);margin-bottom:20px;">Your answer filters which cars we show — only those we can actually deliver on time.</p>
+
+          <div class="u-timeline-grid">
+            <div class="u-tcard sel" id="utc-today" onclick="uSelectTimeline(this,'today')">
+              <span class="u-tcard-icon">⚡</span>
+              <div class="u-tcard-title">Today</div>
+              <div class="u-tcard-desc">Physical handover same day. Drive it home tonight.</div>
+              <span class="u-tcard-badge">Delivery guaranteed</span>
+            </div>
+            <div class="u-tcard" id="utc-48hrs" onclick="uSelectTimeline(this,'48hrs')">
+              <span class="u-tcard-icon">📅</span>
+              <div class="u-tcard-title">48 Hours</div>
+              <div class="u-tcard-desc">Pre-delivery inspection + paperwork done before handover.</div>
+              <span class="u-tcard-badge">Fast Track stock</span>
+            </div>
+            <div class="u-tcard" id="utc-week" onclick="uSelectTimeline(this,'week')">
+              <span class="u-tcard-icon">📆</span>
+              <div class="u-tcard-title">This Week</div>
+              <div class="u-tcard-desc">Widest selection. More cars across your city.</div>
+              <span class="u-tcard-badge">More options</span>
+            </div>
+          </div>
+
+          <!-- RC Transparency callout -->
+          <div class="rc-callout">
+            <strong>ℹ️ Drive today. RC updated in 7–21 days.</strong>
+            Physical possession is instant — you drive the car the day we hand over keys. Your name appears on the RC within 7–21 working days, managed entirely by CarDekho. You are legally protected from Day 1 via Form 29/30 acknowledgement.
+          </div>
+
+          <!-- Exchange toggle -->
+          <div class="exchange-box">
+            <div class="exchange-toggle-row">
+              <div class="ex-toggle-label">
+                <h4>💱 Have a car to sell / exchange?</h4>
+                <p>We'll value it instantly and show you the net EMI after deducting your old car's value.</p>
+              </div>
+              <label class="u-switch">
+                <input type="checkbox" id="urgExchangeToggle" onchange="uToggleExchange(this)">
+                <span class="u-slider-track"></span>
+              </label>
+            </div>
+
+            <div class="exchange-detail-box" id="urgExchangeDetail">
+              <label class="field-label" for="urgRegInput" style="margin-top:0;">Registration Number</label>
+              <div style="display:flex;gap:8px;margin-bottom:10px;">
+                <input class="mini-field" id="urgRegInput" placeholder="e.g. DL 01 AB 1234" style="margin-bottom:0;flex:1;">
+                <button class="btn btn-outline" style="height:46px;white-space:nowrap;" onclick="uGetValuation()">Get value →</button>
+              </div>
+              <div id="urgValResult" class="val-result">
+                <div class="val-range" id="urgValRange">—</div>
+                <div class="val-sub">Estimated market value · Pickup on same day as new car delivery</div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%;height:52px;font-size:15px;" onclick="uGoScreen(2)">
+            Find my car →
+          </button>
+        </div>
+
+        <!-- ── SCREEN 2: Preferences ── -->
+        <div class="u-screen" id="us2">
+          <h3 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px;">A few quick details</h3>
+          <p style="font-size:14px;color:var(--ink-50);margin-bottom:20px;">3 questions. Your EMI budget is already set — we just need your city and car type.</p>
+
+          <label class="field-label" for="urgCity">Your City</label>
+          <select class="mini-field" id="urgCity" style="margin-bottom:18px;">
+            <option>Jaipur</option><option>Delhi NCR</option><option>Mumbai</option>
+            <option>Bengaluru</option><option>Hyderabad</option><option>Pune</option><option>Chennai</option>
+          </select>
+
+          <label class="field-label">Car Type Preference</label>
+          <div class="u-chips" style="margin-bottom:18px;">
+            <button class="u-chip sel" onclick="uToggleChip(this)">🚗 Any</button>
+            <button class="u-chip" onclick="uToggleChip(this)">🚙 Hatchback</button>
+            <button class="u-chip" onclick="uToggleChip(this)">🚘 Sedan</button>
+            <button class="u-chip" onclick="uToggleChip(this)">🛻 SUV</button>
+          </div>
+
+          <label class="field-label">Confirm your EMI budget</label>
+          <div style="background:var(--blue-bg);border:1.5px solid #C5D9F5;border-radius:var(--r-sm);padding:14px 16px;font-size:14px;color:var(--blue);font-weight:600;margin-bottom:20px;" id="urgBudgetConfirm">
+            ₹8,000/month — matched from your main slider
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <button class="btn btn-ghost" onclick="uGoScreen(1)">← Back</button>
+            <button class="btn btn-primary" style="height:52px;" onclick="uGoScreen(3)">Show matching cars →</button>
+          </div>
+        </div>
+
+        <!-- ── SCREEN 3: Results ── -->
+        <div class="u-screen" id="us3">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+            <div>
+              <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;letter-spacing:-0.02em;">Urgent-eligible cars near you</h3>
+              <p style="font-size:13px;color:var(--ink-50);">Same-city RTO · Zero challans · Loan-free · RC filing within 24 hrs</p>
+            </div>
+            <span class="badge green">3 cars ready</span>
+          </div>
+
+          <div class="u-cars-grid">
+            <!-- Best match card -->
+            <article class="u-car-card best-match">
+              <div class="u-car-img-wrap">
+                <img class="u-car-img" src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=700&q=80" alt="Maruti Swift VXI">
+                <span class="u-delivery-badge today">⚡ Today</span>
+              </div>
+              <div class="u-car-body">
+                <div class="badge-row">
+                  <span class="badge red">Best match</span>
+                  <span class="badge green">RC ready</span>
+                </div>
+                <div class="u-car-title">Maruti Swift VXI</div>
+                <div class="u-car-meta">2020 · Petrol · Manual · 28,500 km · Jaipur RTO</div>
+                <div class="u-car-emi">₹6,950<span>/mo</span></div>
+                <div class="u-car-signals">
+                  <div class="u-signal">Challan-free</div>
+                  <div class="u-signal">Loan-free</div>
+                  <div class="u-signal">1 owner</div>
+                </div>
+                <div class="u-net-cost" id="unc1" style="display:none;">
+                  💱 Net after exchange: <strong>₹3,800/mo</strong>
+                </div>
+                <button class="btn btn-primary" style="width:100%;height:44px;font-size:13px;margin-top:8px;" onclick="uGoReserve('Maruti Swift VXI','₹6,950','Today')">
+                  Reserve this car →
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="u-car-card">
+              <div class="u-car-img-wrap">
+                <img class="u-car-img" src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=700&q=80" alt="Hyundai i20 Sportz">
+                <span class="u-delivery-badge d48">📅 48 hrs</span>
+              </div>
+              <div class="u-car-body">
+                <div class="badge-row">
+                  <span class="badge green">RC ready</span>
+                  <span class="badge blue">Verified</span>
+                </div>
+                <div class="u-car-title">Hyundai i20 Sportz</div>
+                <div class="u-car-meta">2019 · Petrol · Manual · 32,000 km · Jaipur RTO</div>
+                <div class="u-car-emi">₹7,800<span>/mo</span></div>
+                <div class="u-car-signals">
+                  <div class="u-signal">Challan-free</div>
+                  <div class="u-signal">Loan-free</div>
+                  <div class="u-signal">1 owner</div>
+                </div>
+                <div class="u-net-cost" id="unc2" style="display:none;">
+                  💱 Net after exchange: <strong>₹4,650/mo</strong>
+                </div>
+                <button class="btn btn-outline" style="width:100%;height:44px;font-size:13px;margin-top:8px;" onclick="uGoReserve('Hyundai i20 Sportz','₹7,800','48 hrs')">
+                  Reserve this car →
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="u-car-card">
+              <div class="u-car-img-wrap">
+                <img class="u-car-img" src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=700&q=80" alt="Honda City VX">
+                <span class="u-delivery-badge week">📆 This week</span>
+              </div>
+              <div class="u-car-body">
+                <div class="badge-row">
+                  <span class="badge green">RC ready</span>
+                  <span class="badge amber">Automatic</span>
+                </div>
+                <div class="u-car-title">Honda City VX</div>
+                <div class="u-car-meta">2018 · Petrol · Automatic · 39,800 km · Jaipur RTO</div>
+                <div class="u-car-emi">₹8,700<span>/mo</span></div>
+                <div class="u-car-signals">
+                  <div class="u-signal">Challan-free</div>
+                  <div class="u-signal">Loan-free</div>
+                  <div class="u-signal">1 owner</div>
+                </div>
+                <div class="u-net-cost" id="unc3" style="display:none;">
+                  💱 Net after exchange: <strong>₹5,550/mo</strong>
+                </div>
+                <button class="btn btn-outline" style="width:100%;height:44px;font-size:13px;margin-top:8px;" onclick="uGoReserve('Honda City VX','₹8,700','This week')">
+                  Reserve this car →
+                </button>
+              </div>
+            </article>
+          </div>
+
+          <div style="margin-top:16px;display:flex;justify-content:flex-start;">
+            <button class="btn btn-ghost" style="height:40px;font-size:13px;" onclick="uGoScreen(2)">← Change preferences</button>
+          </div>
+        </div>
+
+        <!-- ── SCREEN 4: Reserve ── -->
+        <div class="u-screen" id="us4">
+          <div style="margin-bottom:18px;">
+            <div class="badge red" style="margin-bottom:10px;height:auto;padding:4px 12px;font-size:12px;" id="uReserveBadge">⚡ Reserving — Today delivery</div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;letter-spacing:-0.02em;" id="uReserveCar">Maruti Swift VXI</h3>
+            <p style="font-size:14px;color:var(--ink-50);">Hold your slot for 4 hours with a refundable ₹5,000 booking amount.</p>
+          </div>
+
+          <!-- RC Timeline -->
+          <div class="u-rc-timeline">
+            <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;">🗂 RC Transfer — We handle everything</div>
+            <div style="font-size:12px;color:var(--ink-50);margin-bottom:0;">You drive today. RC updated in 7–21 working days. SMS updates throughout.</div>
+            <div class="u-rc-steps">
+              <div class="u-rc-step">
+                <div style="position:relative;z-index:1;">
+                  <div class="u-rc-dot done">✓</div>
+                  <div class="u-rc-label">Forms signed</div>
+                  <div class="u-rc-sub">Day 0</div>
+                </div>
+                <div class="u-rc-step-line done"></div>
+              </div>
+              <div class="u-rc-step">
+                <div style="position:relative;z-index:1;">
+                  <div class="u-rc-dot active">→</div>
+                  <div class="u-rc-label">Parivahan filed</div>
+                  <div class="u-rc-sub">Within 24 hrs</div>
+                </div>
+                <div class="u-rc-step-line"></div>
+              </div>
+              <div class="u-rc-step">
+                <div style="position:relative;z-index:1;">
+                  <div class="u-rc-dot">◎</div>
+                  <div class="u-rc-label">RTO processing</div>
+                  <div class="u-rc-sub">7–14 days</div>
+                </div>
+                <div class="u-rc-step-line"></div>
+              </div>
+              <div class="u-rc-step">
+                <div style="position:relative;z-index:1;">
+                  <div class="u-rc-dot">⬜</div>
+                  <div class="u-rc-label">RC updated</div>
+                  <div class="u-rc-sub">Your name</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delivery guarantee -->
+          <div class="u-guarantee">
+            <div class="u-guarantee-title">⚡ Delivery Guarantee</div>
+            <div class="u-guarantee-sub">Car in your hands by committed date or full refund of your ₹5,000 booking amount. No questions asked.</div>
+          </div>
+
+          <!-- Exchange summary (if toggled) -->
+          <div id="urgReserveExchange" style="display:none;background:var(--green-bg);border:1.5px solid #C0E5D5;border-radius:var(--r-sm);padding:14px 16px;margin-bottom:16px;">
+            <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Exchange included</div>
+            <div style="font-size:14px;font-weight:600;color:var(--green);">Old car picked up on same day as delivery · RC transfer handled by CarDekho for both cars.</div>
+          </div>
+
+          <!-- EMI summary -->
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px 16px;margin-bottom:16px;">
+            <div style="font-size:12px;color:var(--ink-50);margin-bottom:4px;">Monthly EMI</div>
+            <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--red);letter-spacing:-0.03em;" id="uReserveEmi">₹6,950/mo</div>
+            <div style="font-size:12px;color:var(--ink-50);margin-top:3px;">₹0 booking fee deducted from down payment · Slot held for 4 hours</div>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%;height:52px;font-size:15px;margin-bottom:10px;" onclick="uConfirmReserve(this)">
+            Reserve with ₹5,000 →
+          </button>
+          <button class="btn btn-ghost" style="width:100%;height:44px;" onclick="uGoScreen(3)">
+            ← Back to results
+          </button>
+          <p style="text-align:center;font-size:12px;color:var(--ink-50);margin-top:12px;line-height:1.6;">
+            ₹5,000 fully refundable · No CIBIL impact · Insurance activated on delivery
+          </p>
+        </div>
+
+      </div><!-- /urgent-body -->
+    </div><!-- /urgent-sheet -->
+  </div><!-- /urgent-drawer -->
+
   <script>
     const budgetEl   = document.getElementById('budget');
     const budgetText = document.getElementById('budgetText');
@@ -1528,6 +2065,9 @@
         btn.classList.add('active');
         if (btn.textContent.trim().toLowerCase().includes('upgrad')) {
           setTimeout(() => document.getElementById('upgrade').scrollIntoView({behavior:'smooth'}), 150);
+        }
+        if (btn.textContent.trim().includes('Urgent')) {
+          openUrgentDrawer();
         }
       });
     });
@@ -2102,6 +2642,122 @@
         logEvent({ eventType: 'car_click', carName: name, cta: 'car_card' });
       });
     });
+
+    // ─── URGENT DRAWER LOGIC ───────────────────────────────────────────────────
+    let urgState = {
+      timeline: 'today',
+      exchange: false,
+      estValuation: 0,
+      selectedCar: null,
+      selectedEmi: null,
+      selectedDelivery: null
+    };
+
+    function openUrgentDrawer() {
+      document.getElementById('urgentDrawer').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      // Sync budget display with main slider
+      const budget = document.getElementById('budget').value;
+      const fmt = '₹' + Number(budget).toLocaleString('en-IN') + '/month';
+      document.getElementById('urgBudgetConfirm').textContent = fmt + ' — matched from your main slider';
+      uGoScreen(1);
+      logEvent({ eventType: 'urgent_drawer_open', cta: 'segment_urgent' });
+    }
+
+    function closeUrgentDrawer() {
+      document.getElementById('urgentDrawer').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close on backdrop click
+    document.getElementById('urgentDrawer').addEventListener('click', e => {
+      if (e.target === document.getElementById('urgentDrawer')) closeUrgentDrawer();
+    });
+
+    function uGoScreen(n) {
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById('us' + i).classList.toggle('active', i === n);
+      }
+      uUpdateProgress(n);
+      logEvent({ eventType: 'urgent_screen', page: 'screen_' + n, cta: 'urgent_flow' });
+    }
+
+    function uUpdateProgress(n) {
+      for (let i = 1; i <= 4; i++) {
+        const step = document.getElementById('up' + i);
+        step.classList.remove('active', 'done');
+        if (i < n) step.classList.add('done');
+        if (i === n) step.classList.add('active');
+      }
+      for (let i = 1; i <= 3; i++) {
+        const line = document.getElementById('upl' + i);
+        if (line) line.classList.toggle('done', i < n);
+      }
+    }
+
+    function uSelectTimeline(el, val) {
+      document.querySelectorAll('.u-tcard').forEach(c => c.classList.remove('sel'));
+      el.classList.add('sel');
+      urgState.timeline = val;
+    }
+
+    function uToggleChip(el) {
+      el.classList.toggle('sel');
+    }
+
+    function uToggleExchange(el) {
+      urgState.exchange = el.checked;
+      document.getElementById('urgExchangeDetail').classList.toggle('open', el.checked);
+      // Show/hide net cost boxes in results
+      ['unc1','unc2','unc3'].forEach(id => {
+        const el2 = document.getElementById(id);
+        if (el2) el2.style.display = urgState.exchange ? 'block' : 'none';
+      });
+      // Show/hide exchange summary in reserve
+      const rEx = document.getElementById('urgReserveExchange');
+      if (rEx) rEx.style.display = urgState.exchange ? 'block' : 'none';
+    }
+
+    function uGetValuation() {
+      const reg = document.getElementById('urgRegInput').value.trim();
+      if (!reg) return;
+      const result = document.getElementById('urgValResult');
+      const range = document.getElementById('urgValRange');
+      // Simulated instant valuation
+      urgState.estValuation = 310000;
+      range.textContent = '₹2.9L – ₹3.3L';
+      result.style.display = 'block';
+    }
+
+    function uGoReserve(carName, emi, delivery) {
+      urgState.selectedCar = carName;
+      urgState.selectedEmi = emi;
+      urgState.selectedDelivery = delivery;
+
+      document.getElementById('uReserveCar').textContent = carName;
+      document.getElementById('uReserveEmi').textContent = emi + '/mo';
+      const badge = document.getElementById('uReserveBadge');
+      const iconMap = { 'Today': '⚡', '48 hrs': '📅', 'This week': '📆' };
+      badge.textContent = (iconMap[delivery] || '⚡') + ' Reserving — ' + delivery + ' delivery';
+
+      const rEx = document.getElementById('urgReserveExchange');
+      if (rEx) rEx.style.display = urgState.exchange ? 'block' : 'none';
+
+      uGoScreen(4);
+      logEvent({ eventType: 'urgent_reserve_view', carName, cta: 'urgent_reserve' });
+    }
+
+    function uConfirmReserve(btn) {
+      btn.textContent = '✅ Slot held! Dealer will call within 1 hour.';
+      btn.disabled = true;
+      btn.style.background = 'var(--green)';
+      logEvent({
+        eventType: 'urgent_reserve_confirmed',
+        carName: urgState.selectedCar,
+        cta: 'urgent_reserve_confirm',
+        delivery_hours: urgState.selectedDelivery
+      });
+    }
   </script>
 </body>
 </html>
